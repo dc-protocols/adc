@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD>
+<TITLE>   Appendix --- Source for the Compression Function of Tiger</TITLE>
+</HEAD>
+<BODY>
+<meta name="description" value="   Appendix --- Source for the Compression Function of Tiger">
+<meta name="keywords" value="tiger">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+ <BR> <HR><A NAME=tex2html80 HREF="node8.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html78 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html72 HREF="node6.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html81 HREF="node8.html">   About this document </A>
+<B>Up:</B> <A NAME=tex2html79 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html73 HREF="node6.html">References</A>
+<BR> <HR> <P>
+<H1><A NAME=SECTION00070000000000000000>   Appendix --- Source for the Compression Function of Tiger</A></H1>
+<P>
+<PRE>word64 t1[256] = {...};
+word64 t2[256] = {...};
+word64 t3[256] = {...};
+word64 t4[256] = {...};
+
+TIGER_compression_function (state, block)
+word64 state[3];
+unsigned word64 block[8];
+{
+  word64 a = state[0], b = state[1], c = state[2];
+  word64 x0=block[0], x1=block[1], x2=block[2], x3=block[3], 
+         x4=block[4], x5=block[5], x6=block[6], x7=block[7];
+  word64 aa, bb, cc;
+
+#define save_abc aa = a; bb = b; cc = c;
+
+#define round(a,b,c,x,mul) \
+      c ^= x; \
+      a -= t1[((c)&gt;&gt;(0*8))&amp;0xFF] ^ t2[((c)&gt;&gt;(2*8))&amp;0xFF] ^ \
+           t3[((c)&gt;&gt;(4*8))&amp;0xFF] ^ t4[((c)&gt;&gt;(6*8))&amp;0xFF] ; \
+      b += t4[((c)&gt;&gt;(1*8))&amp;0xFF] ^ t3[((c)&gt;&gt;(3*8))&amp;0xFF] ^ \
+           t2[((c)&gt;&gt;(5*8))&amp;0xFF] ^ t1[((c)&gt;&gt;(7*8))&amp;0xFF] ; \
+      b *= mul;
+</PRE>
+<P>
+<PRE>#define pass(a,b,c,mul) \
+      round(a,b,c,x0,mul) \
+      round(b,c,a,x1,mul) \
+      round(c,a,b,x2,mul) \
+      round(a,b,c,x3,mul) \
+      round(b,c,a,x4,mul) \
+      round(c,a,b,x5,mul) \
+      round(a,b,c,x6,mul) \
+      round(b,c,a,x7,mul)
+
+#define key_schedule \
+      x0 -= x7 ^ 0xA5A5A5A5A5A5A5A5; \
+      x1 ^= x0; \
+      x2 += x1; \
+      x3 -= x2 ^ ((~x1)&lt;&lt;19); \
+      x4 ^= x3; \
+      x5 += x4; \
+      x6 -= x5 ^ ((~x4)&gt;&gt;23); \
+      x7 ^= x6; \
+      x0 += x7; \
+      x1 -= x0 ^ ((~x7)&lt;&lt;19); \
+      x2 ^= x1; \
+      x3 += x2; \
+      x4 -= x3 ^ ((~x2)&gt;&gt;23); \
+      x5 ^= x4; \
+      x6 += x5; \
+      x7 -= x6 ^ 0x0123456789ABCDEF;
+
+#define feedforward a ^= aa; b -= bb; c += cc;
+
+#define compress \
+      save_abc \
+      pass(a,b,c,5) \
+      key_schedule \
+      pass(c,a,b,7) \
+      key_schedule \
+      pass(b,c,a,9) \
+      feedforward
+
+  compress;
+
+  state[0] = a; state[1] = b; state[2] = c;
+}
+</PRE>
+<P>
+<IMG  ALIGN=BOTTOM ALT="" SRC="img15.gif">
+<P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Eli Biham <BR>
+Thu Feb  8 15:00:23 IST 1996</I>
+</ADDRESS>
+</BODY>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD>
+<TITLE> Our Proposal</TITLE>
+</HEAD>
+<BODY>
+<meta name="description" value=" Our Proposal">
+<meta name="keywords" value="tiger">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+ <BR> <HR><A NAME=tex2html30 HREF="node3.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html28 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html22 HREF="node1.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html31 HREF="node3.html"> Specification</A>
+<B>Up:</B> <A NAME=tex2html29 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html23 HREF="node1.html"> Motivation and Design </A>
+<BR> <HR> <P>
+<H1><A NAME=SECTION00020000000000000000> Our Proposal</A></H1>
+<P>
+In this paper we propose a new hash function, which is called Tiger, as it is
+strong and fast: as fast as SHA-1 on 32-bit processors, and about three times
+faster on 64-bit (DEC Alpha) processors. It is also expected to be faster than
+SHA-1 on 16-bit processors, since SHA-1 is optimized for 32-bit machines, while
+our proposal is designed to work adequately on many word sizes.
+<P>
+Its main operation is table lookup into four S-boxes, each from eight bits to
+64 bits. On 32-bit machines this can be implemented as a pair of table lookups,
+with the offset computation done only once. The other operations are 64-bit
+additions and subtractions, 64-bit multiplication by small constants (5, 7 and
+9), 64-bit shifts and logical operations such as XOR and NOT. All these
+operations are at most twice as slow on 32-bit machines, with the exception of
+the shifts and the multiplications by small constants which are four or five
+times slower (Alpha processors have special instructions which multiply by 
+constants of the form <IMG  ALIGN=MIDDLE ALT="" SRC="img1.gif"> and <IMG  ALIGN=MIDDLE ALT="" SRC="img2.gif">).
+<P>
+For drop-in compatibility, we adopt the outer structure of the MD4 family: the
+message is padded by a single `1' bit followed by a string of `0's and finally
+the message length as a 64-bit word. The result is divided into <b>n</b> 512-bit 
+blocks.
+<P>
+The size of the hash value, and of the intermediate state, is three words, or 
+192 bits. This value was chosen for the following reasons:
+<P>
+<OL><LI> Since we use 64-bit words, the size should be a multiple of 64;
+<LI> To be compatible with applications using SHA-1, the hash size should be
+at least 160 bits;
+<LI> All the successful shortcut attacks on existing hash functions attack the
+intermediate state, rather than the final hash value. The attacker typically
+chooses two colliding values for an intermediate block, and this propagates to
+a collision of the full function. However, these attacks would not work if the 
+intermediate hash values were larger.
+</OL>
+<P>
+Tiger with the full 192 bits of output in use may be called Tiger/192, and we
+recommend its use in all new applications. When replacing other functions in 
+existing applications, we suggest two shorter variants:
+<P>
+<OL><LI> Tiger/160: the hash value is the first 160 bits of the result of 
+Tiger/192, and is used for compatibility with SHA and SHA-1;
+<LI> Tiger/128: the hash value is the first 128 bits of the result of 
+Tiger/192, and is used for compatibility with MD4, MD5, RIPE-MD, the Snefru
+variants and some hash functions based on block ciphers.
+</OL>
+<P>
+We conjecture that all the three variants of Tiger are collision-free, in that
+collisions for Tiger/<b>N</b> cannot be found with substantially less effort than
+<IMG  ALIGN=MIDDLE ALT="" SRC="img3.gif">. We also believe that they are one-way and multiplication-free
+[And93].
+<P>
+The efficiency of this function is partially based on the potential parallelism
+in its design. In the MD and Snefru families, each operation depends directly
+on the result of the previous operation, and thus RISC processors cannot be
+used efficiently due to pipeline stalls. In each round of Tiger, the eight
+table lookup operations can be done in parallel, so compilers can make best use
+of pipelining. The design also allows efficient hardware implementation.
+<P>
+The memory size required by Tiger is only slightly more than the size of the
+four S boxes. If this can be accommodated within the cache of the processor,
+the computation runs about twice as fast (measured on DEC Alpha). The size of
+the four S boxes is <IMG  ALIGN=BOTTOM ALT="" SRC="img4.gif"> Kbytes, which is about the size
+of the cache on most machines. If eight S boxes were used, 16 Kbytes would be
+required, which is twice as the size of the cache on Alpha.
+<P>
+<BR> <HR><A NAME=tex2html30 HREF="node3.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html28 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html22 HREF="node1.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html31 HREF="node3.html"> Specification</A>
+<B>Up:</B> <A NAME=tex2html29 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html23 HREF="node1.html"> Motivation and Design </A>
+<BR> <HR> <P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Eli Biham <BR>
+Thu Feb  8 15:00:23 IST 1996</I>
+</ADDRESS>
+</BODY>

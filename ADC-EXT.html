@@ -1,0 +1,2696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc3 3.2.3" />
+<title>ADC Extensions</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc3 xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+pre {
+  white-space: pre-wrap;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; vertical-align: text-bottom; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(4);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>ADC Extensions</h1>
+<span id="author">1.0.9, UNRELEASED</span><br />
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_abstract">1. Abstract</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>These are the official extensions to ADC. This document is based on the
+information contained in the ADC wiki and ADC forum - spefications from there are moved here
+when they are mature and stable enough.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_version_history">2. Version history</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The latest draft of the next version of this document as well as intermediate
+and older versions can be downloaded from
+$URL: <a href="file:///svn/p/adc/code/trunk/ADC-EXT.txt">file:///svn/p/adc/code/trunk/ADC-EXT.txt</a> $.</p></div>
+<div class="paragraph"><p>This version corresponds to $Revision: 125 $.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_version_1_0_9_unreleased">3. Version 1.0.9, UNRELEASED</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+Clarified HH field in PING to be an ADC URL
+</p>
+</li>
+</ul></div>
+<div class="sect2">
+<h3 id="_version_1_0_8">3.1. Version 1.0.8</h3>
+<div class="paragraph"><p>Fredrik Ullner &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;, 2014-02-11</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Improved <em>NATT</em> documentation, as according to the original paper.
+</p>
+</li>
+<li>
+<p>
+Added <em>ONID</em> extension to provide online service integration.
+</p>
+</li>
+<li>
+<p>
+TIGR now specifies the changes done to the file list.
+</p>
+</li>
+<li>
+<p>
+Added error code <em>ADCS transfers are required</em> in STA.
+</p>
+</li>
+<li>
+<p>
+Added <em>ASCH</em> extension for extended searching capability.
+</p>
+</li>
+<li>
+<p>
+Added <em>Date</em> attribute in file list for files and directories.
+</p>
+</li>
+<li>
+<p>
+Added <em>Size</em> attribute in file list for directories.
+</p>
+</li>
+<li>
+<p>
+Added <em>Children</em> attribute in file list for directories.
+</p>
+</li>
+<li>
+<p>
+Added downloaded progress report for uploaders in GET.
+</p>
+</li>
+<li>
+<p>
+Added <em>RDEX</em> for extended redirecting capabilities.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0_7">3.2. Version 1.0.7</h3>
+<div class="paragraph"><p>Fredrik Ullner &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;, 2012-11-22</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Added application and version separation in INF
+</p>
+</li>
+<li>
+<p>
+TIGR should now correctly reference SCH and RES
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0_6">3.3. Version 1.0.6</h3>
+<div class="paragraph"><p>Fredrik Ullner &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;, 2010-09-29</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Added <em>KEYP</em> extension for providing certificate substitution protection in ADCS.
+</p>
+</li>
+<li>
+<p>
+Added note to signal DFAV.
+</p>
+</li>
+<li>
+<p>
+Added <em>SUDP</em> extension for encryption of UDP traffic.
+</p>
+</li>
+<li>
+<p>
+Added <em>TYPE</em> extension for chat state notifications.
+</p>
+</li>
+<li>
+<p>
+Added <em>FEED</em> extension for RSS feeds.
+</p>
+</li>
+<li>
+<p>
+Added <em>SEGA</em> extension for grouping of file extensions in SCH.
+</p>
+</li>
+<li>
+<p>
+Added failover hub addresses to the hub&#8217;s INF.
+</p>
+</li>
+<li>
+<p>
+Added free slots to the client&#8217;s INF.
+</p>
+</li>
+<li>
+<p>
+Added <em>ADCS</em> extension for encryption in ADC.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0_5">3.4. Version 1.0.5</h3>
+<div class="paragraph"><p>Fredrik Ullner &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;, 2010-09-16</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Added locale field to INF.
+</p>
+</li>
+<li>
+<p>
+Modified user parameter <em>line</em> in UCMD to handle multiple inputs.
+</p>
+</li>
+<li>
+<p>
+Added hidden in enumeration of CT field in INF.
+</p>
+</li>
+<li>
+<p>
+Added error code Invalid feature in STA.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0_4">3.5. Version 1.0.4</h3>
+<div class="paragraph"><p>Fredrik Ullner &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;, 2010-06-29</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Added magnet link extension to UCMD.
+</p>
+</li>
+<li>
+<p>
+Added NAT traversal extension <em>NATT</em>.
+</p>
+</li>
+<li>
+<p>
+Added referral field to STA.
+</p>
+</li>
+<li>
+<p>
+Added upload queue field to STA.
+</p>
+</li>
+<li>
+<p>
+Added partial file sharing extension <em>PFSR</em>.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0_3">3.6. Version 1.0.3</h3>
+<div class="paragraph"><p>Fredrik Ullner &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;, 2010-05-26</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Removed optional keywords from UCMD.
+</p>
+</li>
+<li>
+<p>
+Added <em>BLOM</em> extension for bloom filters.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0_2">3.7. Version 1.0.2</h3>
+<div class="paragraph"><p>Fredrik Ullner &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;, 2010-04-04</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Added <em>UCMD</em> extension for user commands.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0_1">3.8. Version 1.0.1</h3>
+<div class="paragraph"><p>Fredrik Ullner &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;, 2009-08-04</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Added timestamp field to MSG.
+</p>
+</li>
+<li>
+<p>
+Added <em>DFAV</em> extension for distributing hub addresses.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0">3.9. Version 1.0</h3>
+<div class="paragraph"><p>Jacek Sieka &lt;<a href="mailto:arnetheduck@gmail.com">arnetheduck@gmail.com</a>&gt;, 2008-05-02</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Initial release created from original ADC 1.0 text.
+</p>
+</li>
+<li>
+<p>
+Added <em>PING</em> extension for hub pingers.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_extensions">4. Extensions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_tigr_tiger_tree_hash_support">4.1. TIGR - Tiger tree hash support</h3>
+<div class="sect3">
+<h4 id="_general">4.1.1. General</h4>
+<div class="paragraph"><p>This extension adds Tiger tree hash support to the base protocol. It is
+intended to be used both for identifying files and for purposes such as CID
+generation and password negotiation</p></div>
+</div>
+<div class="sect3">
+<h4 id="_tigr_for_shared_files">4.1.2. TIGR for shared files</h4>
+<div class="paragraph"><p>All files shared by TIGR supporting clients must have been hashed using Merkle
+Hash trees, as defined by
+<a href="http://web.archive.org/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html">http://web.archive.org/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html</a>.
+The Tiger
+algorithm, as specified by <a href="http://www.cs.technion.ac.il/~biham/Reports/Tiger/">http://www.cs.technion.ac.il/~biham/Reports/Tiger/</a>,
+functions as the hash algorithm. A base segment size of 1024 bytes must be
+used when generating the tree, but clients may then discard parts of the tree
+as long as at least 7 levels are kept or a block granularity of 64 KiB is
+achieved.</p></div>
+<div class="paragraph"><p>Generally, the root of the tree (TTH) serves to identify a file uniquely.
+Searches use it and it must be present in the file list. Further, the root of
+the file list must also be available and discoverable via GFI. A client may
+also request the rest of the tree using the normal client-client transfer
+procedure. The root must be encoded using base32 encoding when converted to
+text.</p></div>
+<div class="paragraph"><p>In the file list, each File element carries an additional attribute "TTH"
+containing the base32-encoded value of the Tiger tree root.</p></div>
+<div class="paragraph"><p>In the GET/GFI type, the full tree may be accessed using the "tthl" type.</p></div>
+<div class="paragraph"><p>"tthl" transfers send the largest set of leaves available) as a binary stream
+of leaf data, right-to-left, with no spacing in between them.  &lt;start_pos&gt;
+must be set to 0 and &lt;bytes&gt; to -1 when requesting the data.  &lt;bytes&gt; must
+contain the total binary size of the leaf stream in SND; by dividing this
+length by the individual hash length, the number of leaves, and thus the leaf
+level, can be deducted. The received leaves can then be used to reconstruct
+the entire tree, and the resulting root must match the root of the file (this
+verifies the integrity of the tree itself). Identifier must be a TTH root
+value from the "TTH/" root.</p></div>
+<div class="paragraph"><p>In the GET/GFI namespace, files are identified by
+"TTH/&lt;base32-encoded tree root&gt;".</p></div>
+<div class="paragraph"><p>In SCH and RES, the following attributes are added:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">TR</p></td>
+<td align="left" valign="top"><p class="table">Tiger tree Hash root, encoded with base32.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">TD</p></td>
+<td align="left" valign="top"><p class="table">Tree depth, index of the highest level of tree data available, root-only = 0, first level (2 leaves) = 1, second level = 2, etc&#8230;</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>The following changes are done to the file list XML schema:</p></div>
+<div class="paragraph"><p>A new type is defined with an appropriate attribute:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;xs:simpleType name="tthType"&gt;
+  &lt;xs:restriction base="xs:string"&gt;
+    &lt;xs:pattern value="[A-Za-z2-7]{39}" /&gt;
+  &lt;/xs:restriction&gt;
+&lt;/xs:simpleType&gt;
+&lt;xs:attribute name="TTH" type="tthType" /&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>The attribute is then referenced in the File element:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;xs:attribute ref="TTH" use="required" /&gt;</code></pre>
+</div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bzip_file_list_compressed_with_bzip2">4.2. BZIP - File list compressed with bzip2</h3>
+<div class="paragraph"><p>This extension adds a special file "files.xml.bz2" in the unnamed root of the
+share which contains "files.xml" compressed with bzip2 1.0.3+ (www.bzip.org).</p></div>
+</div>
+<div class="sect2">
+<h3 id="_zlib_compressed_communication">4.3. ZLIB - Compressed communication</h3>
+<div class="paragraph"><p>There are two variants of zlib support, FULL and GET, and only one should be
+used on a each communications channel set up.</p></div>
+<div class="sect3">
+<h4 id="_zlib_full">4.3.1. ZLIB-FULL</h4>
+<div class="paragraph"><p>If, during SUP negotiation, a peer sends "ZLIF" in its support string, it must
+accept two additional commands, ZON and ZOF. Upon reception of ZON the peer
+must start decompressing the incoming stream of data with zlib before
+interpreting it, and stop doing so after ZOF is received (in the compressed
+stream). The compressing end must partially flush the zlib buffer after each
+chunk of data to allow for decompression by the peer.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_zlib_get">4.3.2. ZLIB-GET</h4>
+<div class="paragraph"><p>The alternative is to send "ZLIG" to indicate that zlib is supported for
+binary transfers using the GET command, but not otherwise. A flag "ZL1" is
+added to the to the SND command to indicate that the data will come
+compressed, and the client receiving requests it by adding the same flag to
+GET (the sending client may ignore a request for a compressed transfer, but
+may also use it even when not requested by the receiver). The &lt;bytes&gt;
+parameter of the GET and SND commands is to be interpreted as the number of
+uncompressed bytes to be transferred.</p></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ping_pinger_extension">4.4. PING - Pinger extension</h3>
+<div class="paragraph"><p>This extension can be supported by both clients and hubs, and when present, if hub
+supports it, it must send additional information to the client ( otherwise normal
+base client).</p></div>
+<div class="paragraph"><p>It&#8217;s purpose is to send to hublist pingers additional information about the hub
+ that otherwise it would be impossible to get as a normal user (eg. minimum share,
+ maximum user count, etc).</p></div>
+<div class="sect3">
+<h4 id="_inf">4.4.1. INF</h4>
+<div class="paragraph"><p>Contexts : F</p></div>
+<div class="paragraph"><p>When the client supporting the PING extension connects, the hub must send its
+normal INF along with the following added fields ( none mandatory, if not present,
+it means hub has no restrictions in that matter, or non existent):</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<col />
+<thead>
+<tr>
+<th align="left" valign="top">Code </th>
+<th align="left" valign="top"> Type </th>
+<th align="left" valign="top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">HH</p></td>
+<td align="left" valign="top"><p class="table">url</p></td>
+<td align="left" valign="top"><p class="table">Hub Host address (ADC/ADCS URL address form)</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">WS</p></td>
+<td align="left" valign="top"><p class="table">url</p></td>
+<td align="left" valign="top"><p class="table">Hub Website</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">NE</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">Hub Network</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">OW</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">Hub Owner name</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">UC</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Current User count</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">SS</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Total share size</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">SF</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Total files shared</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">MS</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Minimum share required to enter hub ( bytes )</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">XS</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Maximum share for entering hub ( bytes )</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">ML</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Minimum slots required to enter hub</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">XL</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Maximum slots for entering hub</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">MU</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Minimum hubs connected where clients can be users</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">MR</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Minimum hubs connected where client can be registered</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">MO</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Minimum hubs connected where client can be operators</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">XU</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Maximum hubs connected where clients can be users</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">XR</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Maximum hubs connected where client can be registered</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">XO</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Maximum hubs connected where client can be operators</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">MC</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Maximum possible clients ( users ) who can connect</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">UP</p></td>
+<td align="left" valign="top"><p class="table">integer</p></td>
+<td align="left" valign="top"><p class="table">Hub uptime (seconds)</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">NI</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">Hub name (from BASE)</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">DE</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">Hub description (from BASE)</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">VE</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">Hub software version (from BASE)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>The hub must continue to send the user list as for a normal user (move to
+NORMAL state). The pinger may decide to go through or disconnect (eg. if it
+doesn&#8217;t require additional information about the users).</p></div>
+<div class="sect4">
+<h5 id="_example">Example</h5>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><code>-pinger- HSUP ADBASE ADPING AD..
+-hub- ISUP ADBASE ADPING AD..
+-hub- ISID ..
+-hub- IINF NIhubname DEcurrent\stopic VE.. HHadc://example.org:555 WShttp://example.org/ OWmyname UC2231 SS.. SF.. MS0 ML0 MC5000
+- (pinger may disconnect)</code></pre>
+</div></div>
+</div></div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_hub_hublist_communication">4.4.2. Hub - Hublist communication</h4>
+<div class="paragraph"><p>The same extension goes for hub- hublist communication. This way, the hub
+takes the role of the client and the hublist of the server.</p></div>
+<div class="paragraph"><p>The hublist may send INF about itself with NI field which would become hublist
+name and WS hublist web address.</p></div>
+<div class="sect4">
+<h5 id="_example_2">Example</h5>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre><code>-hub- HSUP ADBASE ADPING AD..
+-hublist- ISUP ADBASE ADPING AD..
+-hublist- IINF NIhublist_name WShublist_address
+-hub- HINF  NIhubname DEcurrent\stopic VE.. HHexample.org:555 WShttp://example.org/ OWmyname UC2231 SS.. SF.. MS0 ML0 MC5000
+-( disconnect )</code></pre>
+</div></div>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ts_timestamp_in_msg">4.5. TS - Timestamp in MSG</h3>
+<div class="paragraph"><p>Timestamp of the moment when the message was sent, expressed in seconds since the Unix Epoch (January 1 1970 00:00:00 GMT).</p></div>
+</div>
+<div class="sect2">
+<h3 id="_dfav_distributed_favorites">4.6. DFAV - Distributed Favorites</h3>
+<div class="paragraph"><p>The idea behind this extension is to generate a public hublist from the users favorite hublist. Implementations should separate between public and private hubs in the favorite hublist of an user, in order not to distribute private hubs where one can not connect to anyway.</p></div>
+<div class="paragraph"><p>Signal DFAV in SUP and the INF&#8217;s SU field.</p></div>
+<div class="sect3">
+<h4 id="_gfa">4.6.1. GFA</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>GFA</code></pre>
+</div></div>
+<div class="paragraph"><p>Contexts: T, C</p></div>
+<div class="paragraph"><p>Asks all users within the same hub with the correct feature to send all publicly available hubs, in their favorite hub list to the requesting client.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_rfa">4.6.2. RFA</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>RFA</code></pre>
+</div></div>
+<div class="paragraph"><p>Contexts: C</p></div>
+<div class="paragraph"><p>Response of a client.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">HA</p></td>
+<td align="left" valign="top"><p class="table">Hub address</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">LG</p></td>
+<td align="left" valign="top"><p class="table">Last succesfull login time ( number of seconds since the epoch (1970), (UTC) )</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>All INF fields from BASE are inherited. All INF fields from PING extension are inherited.</p></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ucmd_user_commands">4.7. UCMD - User commands</h3>
+<div class="literalblock">
+<div class="content">
+<pre><code>CMD name</code></pre>
+</div></div>
+<div class="paragraph"><p>Contexts: F</p></div>
+<div class="paragraph"><p>States: NORMAL</p></div>
+<div class="paragraph"><p>User commands are used to send hub-specific commands to the client which provide useful shortcuts for the user. These commands contain strings which must be sent back to the hub and keyword substitutions in the strings. Each user command has a display name, a string to be sent to the hub, and one or more categories where it may appear. The strings passed to the hub must first be passed through a dictionary replacement that replaces all keywords in the string and then through the equivalent of the C standard function "strftime", with the current time.</p></div>
+<div class="paragraph"><p>Name uniquely (per hub) identifies a particular user command. The name may contain "/" to indicate a logical structure on the viewing client, where each "/" introduces a new submenu level. Other than name, the command also has a number of flags that further detail what to do with it.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">RM</p></td>
+<td align="left" valign="top"><p class="table">1 = Remove Command</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">CT</p></td>
+<td align="left" valign="top"><p class="table">Message Category,  1 = Hub command, client parameters only, 2 = User list command, client and user parameters, 4 = Search result command, client, user and file parameters, 8 = File list command, client, user and file parameters. Multiple types are specified by adding the numbers together.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">TT</p></td>
+<td align="left" valign="top"><p class="table">The full text to be sent to hub, including FOURCC, parameters and keywords.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">CO</p></td>
+<td align="left" valign="top"><p class="table">1 = Constrained, when sending this command on multiple users (for example in search results), constrain it to once per CID only</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">SP</p></td>
+<td align="left" valign="top"><p class="table">1 = Insert separator instead of command name (name must still be present to uniquely identify the command).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_keywords">4.7.1. Keywords</h4>
+<div class="paragraph"><p>Keywords are specified using "%[keyword]". Unknown keywords must be replaced by the empty string. Additionally, all %-substitutions of the C function "strftime" must be supported.</p></div>
+<div class="paragraph"><p>The following tables specify the keywords that must be supported.</p></div>
+<div class="paragraph"><p>Client parameters</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">myCID</p></td>
+<td align="left" valign="top"><p class="table">Client CID</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">mySID</p></td>
+<td align="left" valign="top"><p class="table">ClientSID</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">myXX</p></td>
+<td align="left" valign="top"><p class="table">One for each flag on that particular hub; for example, myI4 and myNI</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>User parameters</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">userCID</p></td>
+<td align="left" valign="top"><p class="table">User CID</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">userSID</p></td>
+<td align="left" valign="top"><p class="table">User SID</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">userXX</p></td>
+<td align="left" valign="top"><p class="table">One for each flag on the user sent; for example, userI4 and userNI</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">line:info</p></td>
+<td align="left" valign="top"><p class="table">Prompts the user for input where <em>info</em> is the displayed text description for the user input. <em>info</em> can be used for multiple values (combobox etc), and should be structured as "general info/default selection/value0/value1/&#8230;/valueN". The general info can be viewed as the caption of the user input dialog. Default selection is an integer k which signifies the default value to be used. Note that N &gt;= k &gt;= 0 and N &gt;= 1. Note that values are 0-index based. Values are separated with a forward slash (<em>/</em>). If a forward slash is part of a value, it should be escaped by using an additional forward slash (<em>//</em>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>File parameters</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">fileXX</p></td>
+<td align="left" valign="top"><p class="table">One for each flag contained within a search result or file list entry (see RES)</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">fileMN</p></td>
+<td align="left" valign="top"><p class="table">Specify magnet link. <a href="http://en.wikipedia.org/wiki/Magnet_link">Magnet links</a> are used to reference files across networks and applications. Clients may ignore parameters it does not understand, but are free to pass on the parameters to other programs.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Hub parameters</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">hubXX</p></td>
+<td align="left" valign="top"><p class="table">One for each flag of the hub; for example, hubNI and hubVE</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_3">4.7.2. Example</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>ICMD ADCH++/Hub\smanagement/Register\snick TTHMSG\s+regnick\s%[userNI]\s%[line:Password\s(leave\sempty\sto\sun-reg)]\s%[line:Level\s(facultative;\sdefaults\sto\syour\sown\slevel\sminus\sone)]\n CT2</p></div>
+<div class="paragraph"><p>ICMD ADCH++/Hub\smanagement/Reload\sbans TTHMSG\s+loadbans\n CT3</p></div>
+<div class="paragraph"><p>ICMD ADCH++/Hub\smanagement/Reload\sscripts TTHMSG\s+reload\n CT3</p></div>
+<div class="paragraph"><p>ICMD ADCH++/Info TTHMSG\s+info\s%[userNI]\n CT2</p></div>
+<div class="paragraph"><p>ICMD ADCH++/Info TTHMSG\s+info\n CT1</p></div>
+</div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_blom_bloom_filter">4.8. BLOM- Bloom filter</h3>
+<div class="paragraph"><p>Bloom filters allow the hub to filter certain searches using bitmap that represents the hashes of the files in the users share. BLOM is an extension that allows hub software to create a map (bloom filter) of the shared files on the hub, but with minimal effort, e.g. the hub doesn&#8217;t keep a list of files, but a filter that never produces false negatives but only possible false positives. This can potentially save bandwidth and effort on the client side. When the user updates the share, the client must send an INF containing the flag SF. The hub may at any time request that the client sends an updated version of its bloom filter by sending a GET command to the client. The client will then respond using SND and send the bloom filter binary data.</p></div>
+<div class="sect3">
+<h4 id="_legend">4.8.1. Legend</h4>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">b</p></td>
+<td align="left" valign="top"><p class="table">Number of bits used for file hashes</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">n</p></td>
+<td align="left" valign="top"><p class="table">Number of files in the user&#8217;s share</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">m</p></td>
+<td align="left" valign="top"><p class="table">Size of the bloom filter in bits</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">k</p></td>
+<td align="left" valign="top"><p class="table">Number of sub-hashes constructed from the file hash</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">h</p></td>
+<td align="left" valign="top"><p class="table">Number of bits to use for each sub-hash</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">p</p></td>
+<td align="left" valign="top"><p class="table">Propability of a false positive</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>The hub chooses k, h and m.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_restrictions">4.8.2. Restrictions</h4>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">k * h &lt; = b</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">h &lt; = 64</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">2<sup>h</sup> &gt; m</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">m mod 64 == 0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_probability">4.8.3. Probability</h4>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">p == (1 - (1 - 1 / m)<sup>(k * n)</sup>)<sup>k</sup></p></td>
+<td align="left" valign="top"><p class="table">False positives</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">p == 0</p></td>
+<td align="left" valign="top"><p class="table">False negatives</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_protocol_changes">4.8.4. Protocol changes</h4>
+<div class="paragraph"><p>Signal BLOM in SUP.</p></div>
+<div class="paragraph"><p>For the SND type, adds H as message type.</p></div>
+<div class="paragraph"><p>For the GET type, adds I as message type.</p></div>
+<div class="paragraph"><p>For the GET type, adds "blom" as type.</p></div>
+<div class="paragraph"><p>For the GET type, "/" shall be used as namespace.</p></div>
+<div class="paragraph"><p>For the GET type, 0 (zero) shall be used as start position.</p></div>
+<div class="paragraph"><p>For the GET type, m / 8 shall be used as byte amount.</p></div>
+<div class="paragraph"><p>Updates GET with the following flags;</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">BK</p></td>
+<td align="left" valign="top"><p class="table">Specify <em>k</em>.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">BH</p></td>
+<td align="left" valign="top"><p class="table">Specify <em>h</em>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_algorithm">4.8.5. Algorithm</h4>
+<div class="paragraph"><p>The client constructs the bloom filter by creating a bit array of m bits set to 0 (zero). For each file it then sets to "1" k positions constructed from the file hash. Seeing the file hash as a stream of bits (starting from the lowest bit of the first byte, ending at the highest bit of the last byte), the client should use h bits starting at the first bit of the first byte to create an integer and apply modulo m to get the position in the bit array, then redo the process k times advancing the starting position by h each time.</p></div>
+<div class="paragraph"><p>Once the hub has received the bloom filter bit array, for each search command it processes, if it contains a hash search term, it can skip broadcasting the search to a particular client if at least one of the k bits in that clients bit array is "0", calculating positions as the client does when setting bits to "1". The hub has to evaluate the filter for each client that it has a bloom filter for, for each search.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_probability_calculations">4.8.6. Probability calculations</h4>
+<div class="paragraph"><p>p = (1 - (1 - 1 / m)<sup>(k * n)</sup>)<sup>k</sup>, thus p becomes smaller as m grows and larger as n grows. Larger m means more bits to transfer but also fewer false positives. The optimum value for k given m and n is (m / n) * ln 2. The largest k supported by a hash of a certain size is b / h, so if the hub wants the smallest p possible, it should choose the smallest possible h which gives the largest k, and then calculate m = k * n/ln 2, checking that the resulting m &lt; 2<sup>h</sup>. 2<sup>h</sup> should much be larger than m (at least 3-4 times), because of how the modulo operator works. Also, with m grows the required bandwidth to transfer the bloom filter, so the hub may wish to cap m. In that case, it should still choose k according to m / n * ln 2, but send an h as big as possible to alleviate biasing problems.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_sample_implementations">4.8.7. Sample implementations</h4>
+<div class="sect4">
+<h5 id="_tiger">Tiger</h5>
+<div class="paragraph"><p>For TTH roots, b is 192 and a reasonable value for h is 24, giving a maximum k = 8 which means that m = 8 * n / ln 2 ≈ 11.5 * n. The required bandwidth then becomes 11.5 * n / 8 bytes, so approximately 1.44 bytes per file in the users share. For 20000 files, m should then be 230016 (taking into account the modulo 64 requirement), giving a p = 0.004, in other words ~99.6% of all searches that don&#8217;t match a users share would not be sent, saving valuable upload bandwidth for the hub. The client calculates i valid positions, if x is an array of bytes containing the hash of the file, on a little-endian machine, by doing pos = x[0+i*h/8] | (x[1+i*h/8] &lt;&lt; 8) | (x[2+i*h/8] &lt;&lt; 16) for i = [0;k). This is of course a special case where h % 8 = 0, the actual algorithm has to take into consideration values for h where the integer crosses byte boundaries.</p></div>
+<div class="paragraph"><p>For test vectors, see the <a href="http://www.adcportal.com/wiki/index.php/Talk:BLOM">ADC wiki talk page</a>.</p></div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_natt_nat_traversal">4.9. NATT - NAT traversal</h3>
+<div class="paragraph"><p>NAT traversal allow two passive clients to connect to each other. This specification is based on the TCP hole punching algorithm described in <span class="footnote" id="_footnote_Peer-to-Peer Communication Across Network Address Translators"><br />[B. Ford and P. Srisuresh and and D. Kegel. "Peer-to-Peer Communication Across Network Address Translators". In USENIX Technical Conference 2005 - pages 179–192. Online version: <a href="http://www.brynosaurus.com/pub/net/p2pnat/">http://www.brynosaurus.com/pub/net/p2pnat/</a>]<br /></span>.</p></div>
+<div class="paragraph"><p>If a client does not support TCP4 or TCP6, it will send an RCM to the client it is trying to connect to. If the other client also doesn&#8217;t support TCP4 (or TCP6 correspondingly), NAT traversal may instead be used. Signal NATT in the INF&#8217;s SU field.</p></div>
+<div class="paragraph"><p>Do note that the hub must forward I4 or I6 for respective clients' INF.</p></div>
+<div class="paragraph"><p>An endpoint is the tuple of IP and port. The "private endpoint port" refers to the outbound port to the connected hub, as seen by the client. Each client must listen for incoming connections on this port. Note that this protocol extension uses only this port for the TCP hole punching, the use of the "public endpoint port" as specified in <span class="footnoteref"><br /><a href="#_footnote_Peer-to-Peer Communication Across Network Address Translators">[Peer-to-Peer Communication Across Network Address Translators]</a><br /></span> is not supported.</p></div>
+<div class="sect3">
+<h4 id="_base_rcm_updates">4.9.1. BASE RCM updates</h4>
+<div class="paragraph"><p>When receiving an RCM and the client does not support TCP4 or TCP6, and if NAT-T is supported in the remote client, a NAT command should be sent repeating the protocol and token. The port shall be the private endpoint port to the connected hub.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_nat">4.9.2. NAT</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>NAT protocol separator port separator token</code></pre>
+</div></div>
+<div class="paragraph"><p>Contexts: T</p></div>
+<div class="paragraph"><p>States: NORMAL</p></div>
+<div class="paragraph"><p>Upon receiving this, try and connect to the specified port.  An RNT command should be sent repeating the protocol and token. The port shall be the private endpoint. Upon receiving this, try and connect to the specified port.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_rnt">4.9.3. RNT</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>RNT protocol separator port separator token</code></pre>
+</div></div>
+<div class="paragraph"><p>Contexts: T</p></div>
+<div class="paragraph"><p>States: NORMAL</p></div>
+<div class="paragraph"><p>Upon receiving this, try and connect to the specified port.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_example_4">4.9.4. Example</h4>
+<div class="paragraph"><p>Client A is connected to hub A with the private endpoint 1000 and client B is connected to hub A with the private endpoint 2000. Client A has the SID AAAA and client B has the SID BBBB.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>Client A: DRCM AAAA BBBB ADC/1.0 foobar</p></div>
+<div class="paragraph"><p>Client B: DNAT BBBB AAAA ADC/1.0 2000 foobar</p></div>
+<div class="paragraph"><p>&lt;Client A connects to client B&#8217;s IP address and port 2000&gt;</p></div>
+<div class="paragraph"><p>Client A: DRNT AAAA BBBB ADC/1.0 1000 foobar</p></div>
+<div class="paragraph"><p>&lt;Client B connects  to client A&#8217;s IP address and port 1000&gt;</p></div>
+</div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rf_referrer_notification">4.10. RF - Referrer notification</h3>
+<div class="paragraph"><p>Extends the RF field of the INF to STA, allowing a client to notify clients and hubs upon SUP-negotiation from where the C-C or C-H originated from.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">RF</p></td>
+<td align="left" valign="top"><p class="table">URL of referrer</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_example_5">4.10.1. Example</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>CSUP ADBASE (&#8230;)</p></div>
+<div class="paragraph"><p>CSTA 000 referrer RFadc://example.com:1234</p></div>
+</div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_qp_upload_queue_notification">4.11. QP - Upload queue notification</h3>
+<div class="paragraph"><p>This extension&#8217;s purpose is creating a queue on a client, when multiple other clients want to download from it, but they have no slots. Currently, when a slot is being freed, the first connecting client gets it. Other clients that don&#8217;t have the luck of getting in time to attempt to download, have to wait again. The client who creates a queue must have a ticket number for each connecting client, which must be kept internally , and a difference between current connecting client&#8217;s queue number and the currently uploading client&#8217;s be provided to the connecting client, so that the clients are being deserved in the order they originally connected. The client could have a ticket incrementing starting from 1 for each session. Connecting clients must use the same token as they used when originally connected.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">QP</p></td>
+<td align="left" valign="top"><p class="table">Queue number, representing how many others are in front in the queue.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_example_6">4.11.1. Example</h4>
+<div class="paragraph"><p>The following example will notify that the client&#8217;s slots are full and that there are three uploads in the queue.</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>CSTA 253 No\sslots\savailable QP3</p></div>
+</div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pfsr_partial_file_sharing">4.12. PFSR - Partial file sharing</h3>
+<div class="paragraph"><p>Partial File Sharing allows sharing of files which are available in user&#8217;s download queue or in finished downloads list. As a result of this, new files will be spread much faster over whole network.</p></div>
+<div class="paragraph"><p>When client receives search request (SCH), it looks into shared list to see whether requested hash is available between shared files. If it&#8217;s found, everything is processed as normally. In other case, it looks into download queue (then, into finished downloads list) and receives a list of available chunks for requested hash. It mustn&#8217;t take every chunk, but only that ones which are fully downloaded and has already been verified (e.g. against TTH leaves).</p></div>
+<div class="paragraph"><p>The feature should be signalled in SUP as PFSR.</p></div>
+<div class="sect3">
+<h4 id="_psr">4.12.1. PSR</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>PSR</code></pre>
+</div></div>
+<div class="paragraph"><p>Contexts: F, U</p></div>
+<div class="paragraph"><p>States: NORMAL</p></div>
+<div class="paragraph"><p>Information about downloaded and verified chunks is sent to requester with this command. When the requester is active command is sent over UDP (with U type) else it is sent over hub (with D type).</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">U4</p></td>
+<td align="left" valign="top"><p class="table">UDP IPv4 port or 0 if we don&#8217;t want receive a response. If UDP port is not zero (it must be when we are passive user), a PSR receiver must respond us with PSR including his available (and verified) chunks. The client must also set UDP port to zero to avoid infinite PSR sending.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">U6</p></td>
+<td align="left" valign="top"><p class="table">Same as U4 but with IPv6 port.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">TR</p></td>
+<td align="left" valign="top"><p class="table">File hash</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">PC</p></td>
+<td align="left" valign="top"><p class="table">Count of downloaded (and verified) chunks the user has.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">PI</p></td>
+<td align="left" valign="top"><p class="table">Comma separated list of start and end index of chunks the user has. If a user has a continous block of chunks, the intermittent start and end indexes may be omitted. For example, if a user has chunk 0 and 4 of total 5 chunks, then PI is "0,1,4,5". If the user has chunk 0, 1 and 4, then PI may be "0,1,1,2,4,5" or "0,2,4,5".</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lc_locale_specification">4.13. LC - Locale specification</h3>
+<div class="paragraph"><p>This extension&#8217;s purpose is to notify the hub which user locale the client is using as well as the default locale for the hub. This allows hubs to customize text sent to clients, depending on language, left-to-right or right-to-left and more. If the hub does not directly support the client&#8217;s locale, it should attempt to fall back to the same language group (e.g. hub supports en-US but not en-AU, so falls back to en-US), and if this is not available, then fall back to the hub&#8217;s own locale.</p></div>
+<div class="paragraph"><p><a href="http://tools.ietf.org/html/bcp47">BCP47</a> should be used as reference for locale structure.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">LC</p></td>
+<td align="left" valign="top"><p class="table">User locale</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Note that the standard suggest that the language should be in lowercase and the country in upper case. Note that the country code may be more than two characters. Additionally, dash (<em>-</em>) and underscore (<em>_</em>) are acceptable seperators.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_hidden_status_for_client_type">4.14. Hidden status for client type</h3>
+<div class="paragraph"><p>This extension will add to the CT field enumeration in the INF to denote a user as "hidden". Other clients shall as appropriate not display the user in user lists etc.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">CT</p></td>
+<td align="left" valign="top"><p class="table">64=Hidden</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Full updated and comparable text;</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">CT</p></td>
+<td align="left" valign="top"><p class="table">Client (user) type, 1=bot, 2=registered user, 4=operator, 8=super user, 16=hub owner, 32=hub (used when the hub sends an INF about itself), 64=Hidden. Multiple types are specified by adding the numbers together.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_invalid_feature_error_code">4.15. "Invalid feature" error code</h3>
+<div class="paragraph"><p>This extension will add "Invalid feature" as error code in STA. Invalid features are features the hub or client deem inappropriate or simply not welcome. The error code should not be used for features the hub or client does not know of.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">48</p></td>
+<td align="left" valign="top"><p class="table">Invalid feature. Flag "FC" is the FOURCC of the invalid feature(s). If multiple features are invalid, use comma between the features (i.e. FCQWER,ASDF,ZXCV).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_keyp_certificate_substitution_protection_in_conjunction_with_adcs">4.16. KEYP - Certificate substitution protection in conjunction with ADCS</h3>
+<div class="paragraph"><p>This extension adds a simple, but secure way to protect against man-in-the-middle attacks against ADC when wrapped with TLS (1.0 or later). It does not require setting up a CA or signing keys, but that is still possible if desired.</p></div>
+<div class="paragraph"><p>The extension introduces a keyprint parameter to the ADCS URI. The keyprint parameter is a hash of the server certificate.</p></div>
+<div class="paragraph"><p>The extension also requires clients to publish their own certificates' keyprint in the KP field in the INF. Assuming one trusts the hub enough not to maliciously change the keyprints en route (a reasonable assumption given the hub&#8217;s existing position of trust), and given that the connection to the hub has been similarly authenticated (either as above or via a directly downloaded trusted certificate), client-client connections are also protected against attempted man-in-the-middle attacks - without messing around with having to get everyone&#8217;s certificates signed in advance.</p></div>
+<div class="paragraph"><p>The keyprint parameter consists of a hash name, followed by a forward slash (<em>/</em>), followed by the Base32-encoded cyrptographic hash of the certificate.</p></div>
+<div class="paragraph"><p>The hash used shall be SHA256. Other extensions may add other hashes, given sufficient security contemplation.</p></div>
+<div class="paragraph"><p>INF field;</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">KP</p></td>
+<td align="left" valign="top"><p class="table">The client&#8217;s own certificate keyprint.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_keyprint_replacement_behaviour">4.16.1. Keyprint replacement behaviour</h4>
+<div class="paragraph"><p>If a client receives a KP field in an FINF broadcast via a hub it is connected to using ADCS and a trusted key as above (or otherwise), it should be regarded as the valid and correct keyprint for that client&#8217;s IP/port/hub combination, replacing any earlier keyprint for that IP/port/hub combination.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_keyprint_verification">4.16.2. Keyprint verification</h4>
+<div class="paragraph"><p>When initiating a TLS handshake with a remote host where the keyprint is known, the client can verify that a man-in-the-middle attack is not occurring by checking if the hash given in the keyprint exactly matches that of the certificate presented during the handshake by the remote host.</p></div>
+<div class="paragraph"><p>Suppose the client is aware of a remote host&#8217;s keyprint and is in the process of connecting to that host. A certificate substitution attack is in place if the hub presents itself with a certificate that does not match and where the certificate is not the root of the valid signature chain covering the certificate.
+If the client detects such an attack, the client should abort the connection and notify the user with a message stating, for example, "Crypto error: Detected attempted man-in-the-middle attack, aborting". (This error quite possibly represents a real attempted attack that has been foiled; we may try auto-reconnecting but we should NEVER ignore it, or it will succeed. We may wish to avoid stating the keyprint of the certificate that was actually received.)</p></div>
+<div class="paragraph"><p>Optionally, when receiving a TLS handshake, if the client knows what the remote host&#8217;s keyprint ought to be, the client could also verify this. However, note that only the initiating side needs to check this for the man-in-the-middle protection to be valid; specifically the hub doesn&#8217;t need to remember, or even understand, clients' keyprints.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_security_considerations">4.16.3. Security Considerations</h4>
+<div class="sect4">
+<h5 id="_general_2">General</h5>
+<div class="paragraph"><p>The certificates, including the name fields, are sent in the clear during the initial handshake. Therefore it is recommended to avoid identifying marks in the certificates CommonName fields (for example) that would clearly single them out as being TLS keys used by ADCS:, and the CID field most definitely should not appear. Quite possibly no name fields should appear, or they should be blank.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_client_hub">Client-Hub</h5>
+<div class="paragraph"><p>The keyprint in the ADCS URI prevents a clandestine man-in-the-middle (certificate substitution) attack on the TLS session with the hub, if and only if the kp parameter hasn&#8217;t been modified by an attacker.</p></div>
+<div class="paragraph"><p>Suggested countermeasures against this include the following;</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Even if otherwise unprotected, an attacker would likely only have a maximum of one opportunity to make the substitution (by changing the kp parameter when the URL is first sent to the user); if it&#8217;s changed later, it will be detected. ("Casual first-use" security, as often used in SSH.)
+</p>
+</li>
+<li>
+<p>
+Checking the fingerprint or transferring the hub URL out-of-band (for example by telephone, or in person) could reveal or thwart man-in-the-middle attacks; something&#8217;s wrong if you don&#8217;t have the same URL as the hub operator gives out. (PGP-style "sneakernet" security.)
+</p>
+</li>
+<li>
+<p>
+We would be protected if the URL were in a file signed by some secure means by a party we have already decided we trust not to change the URLs maliciously. Encryption would not be necessary, only a signature to ensure no untrusted party has modified the KP fields. (A signed hublist, possibly.)
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Finally, we would be protected were the hublist/URL retrieved from an https: site signed by a CA we trust not to issue signatures for any domain to someone who doesn&#8217;t own that domain, and the owner of that domain trusted not to modify the KP fields. (SSL-style security.)</p></div>
+</div>
+<div class="sect4">
+<h5 id="_client_client">Client-Client</h5>
+<div class="paragraph"><p>We are, in particular, trusting the hub not to maliciously modify the KP fields sent by the clients through their INF broadcasts. However;</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The hub would gain nothing from swapping the keyprints of its users, as it would not gain anything from mounting a man-in-the-middle attack on its own users that it does not already have the ability to do, as it&#8217;s the hub; and
+</p>
+</li>
+<li>
+<p>
+If the client do not trust the hub enough not to maliciously modify the data, why is the client choosing to connect to the hub and transmit the client&#8217;s IP address through the hub?
+</p>
+</li>
+<li>
+<p>
+It could be detected by cross-checking with other clients/hubs, as connecting through a malicious hub would clearly show to have a different keyprint to any other hub; therefore any hub doing this would obviously be quickly removed from hublists.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_7">4.16.4. Example</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>adcs://example.com:1234/?kp=SHA256/G3PJC4F4MQ5KOXGE2MPYJW5EW63IC6M7RN7OS663JLLWN2M5I6FQ</p></div>
+</div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sudp_encrypting_udp_traffic">4.17. SUDP - Encrypting UDP traffic</h3>
+<div class="paragraph"><p>This is an extension that allows UDP traffic to be encrypted.</p></div>
+<div class="paragraph"><p>While assymetric encryption may be optimal in sense of security, a symmetric cipher will protect perfectly against outside adversaries given the hub-client connections is also running ADCS. New is that senders now create a random IV for their "request command" (e.g. searches) and send it along the "response command"  (e.g. search result).</p></div>
+<div class="paragraph"><p>Signal SUDP in SUP and in the INF&#8217;s SU field.</p></div>
+<div class="paragraph"><p>If a client signal support for SUDP in an ADCS hub, it may extend commands that will generate a response (e.g. SCH) with a KY-field as the encryption key. Clients shall only include the flag in ADCS hubs.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">KY</p></td>
+<td align="left" valign="top"><p class="table">16 byte encryption key in BASE32. 128 bit AES encryption shall be used.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>For example, a SCH command will result in 29 Bytes of overhead ("&lt;separator&gt;KY"+26 Bytes Base32 encoded key).</p></div>
+<div class="paragraph"><p>A client that has a response for the command can now encrypt the response message by prepending 16 bytes of random data and afterwards encrypting it with AES/CBC/PKCS5Padding (Cipher/Blockmode/Padding) using 16 zero bytes as IV for CBC.</p></div>
+<div class="paragraph"><p>In above scenario, the response would be a RES command.</p></div>
+<div class="sect3">
+<h4 id="_decryption_notes">4.17.1. Decryption notes</h4>
+<div class="paragraph"><p>In the case of searching, the searching client in return for decryption first has to guess which commands it receives are encrypted and which are not. It can do so for example by simply trying decryption with all currently active keys. If a key is wrong or the message was not encrypted, padding will fail and decryption is unsuccessful!</p></div>
+<div class="paragraph"><p>Client may otherwise verify if the message is a U-type message, followed by a known command (and a space). If that is not the case, the client takes the most recent key and decrypts. If that succeed, the message is valid.</p></div>
+<div class="paragraph"><p>There is a potential chance that decryption succeed with what is a bad key. If that is the case, the client should verify that the data is not garbled.</p></div>
+<div class="paragraph"><p>Note that in a normal circumstance, the client will most likely be using relatively few active keys.</p></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_type_typing_notification">4.18. TYPE - Typing notification</h3>
+<div class="paragraph"><p>This extension adds a typing similar to Jabber&#8217;s <a href="http://www.xmpp.org/extensions/xep-0085.html">"Chat state notifications"</a>.</p></div>
+<div class="paragraph"><p>Signal TYPE in SUP and the INF&#8217;s SU field.</p></div>
+<div class="sect3">
+<h4 id="_tpn">4.18.1. TPN</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>TPN code</code></pre>
+</div></div>
+<div class="paragraph"><p>Contexts: F, T</p></div>
+<div class="paragraph"><p>States: NORMAL</p></div>
+<div class="paragraph"><p>Command should be sent to the Reply-To user (PM field in MSG, if present). All TPN messages are sent when the event occur.</p></div>
+<div class="paragraph"><p>Code values:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">00</p></td>
+<td align="left" valign="top"><p class="table">Gone</p></td>
+<td align="left" valign="top"><p class="table">Closed tab, minimized window, etc</p></td>
+<td align="left" valign="top"><p class="table">Should be sent.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">01</p></td>
+<td align="left" valign="top"><p class="table">Inactive</p></td>
+<td align="left" valign="top"><p class="table">Changed tab, window became unfocused (but not closed or minimized), etc</p></td>
+<td align="left" valign="top"><p class="table">Should be sent.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">02</p></td>
+<td align="left" valign="top"><p class="table">Paused</p></td>
+<td align="left" valign="top"><p class="table">Paused typing.</p></td>
+<td align="left" valign="top"><p class="table">Should be sent.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">10</p></td>
+<td align="left" valign="top"><p class="table">Active</p></td>
+<td align="left" valign="top"><p class="table">Now in this tab, reading message and is actively participating in the chat session.</p></td>
+<td align="left" valign="top"><p class="table">Must be sent.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">11</p></td>
+<td align="left" valign="top"><p class="table">Composing</p></td>
+<td align="left" valign="top"><p class="table">Currently typing a message.</p></td>
+<td align="left" valign="top"><p class="table">Must be sent.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feed_rss_feeds">4.19. FEED - RSS feeds</h3>
+<div class="paragraph"><p>The extension adds <a href="http://en.wikipedia.org/wiki/RSS">RSS feed</a> support.</p></div>
+<div class="paragraph"><p>Signal FEED in SUP and the INF&#8217;s SU field.</p></div>
+<div class="sect3">
+<h4 id="_rss">4.19.1. RSS</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>RSS url</code></pre>
+</div></div>
+<div class="paragraph"><p>Context: F, T</p></div>
+<div class="paragraph"><p>States: NORMAL</p></div>
+<div class="paragraph"><p>url is the URL to the feed.</p></div>
+<div class="paragraph"><p>Additional fields:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">CR</p></td>
+<td align="left" valign="top"><p class="table">Name of the author.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">TI</p></td>
+<td align="left" valign="top"><p class="table">Name of post.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">DE</p></td>
+<td align="left" valign="top"><p class="table">Content summary of post.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">LI</p></td>
+<td align="left" valign="top"><p class="table">Direct link to post</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">FN</p></td>
+<td align="left" valign="top"><p class="table">Feed name</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">FN</p></td>
+<td align="left" valign="top"><p class="table">Feed description</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">DT</p></td>
+<td align="left" valign="top"><p class="table">Time of publish. Specified in seconds since UNIX epoch.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">RM</p></td>
+<td align="left" valign="top"><p class="table">1 = Remove feed from aggregator.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_examples">4.19.2. Examples</h4>
+<div class="paragraph"><p>Publish a new feed called <em>Example_feed</em> and with a description <em>description_of_feed</em>:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>RSS <a href="http://example.com/rss">http://example.com/rss</a> FNExample_feed FNdescription_of_feed</p></div>
+</div></div>
+<div class="paragraph"><p>Remove a feed:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>RSS <a href="http://example.com/rss">http://example.com/rss</a> RM1</p></div>
+</div></div>
+<div class="paragraph"><p>Publish a new post <em>New_post</em> from <em>John_Doe</em>:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>RSS <a href="http://example.com/rss">http://example.com/rss</a> TINew_post DEdescription_of_post LIhttp://example.com/entries/new_post DT1253628000 CRJohn_Doe</p></div>
+</div></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sega_grouping_of_file_extensions_in_sch">4.20. SEGA - Grouping of file extensions in SCH</h3>
+<div class="paragraph"><p>In BASE, clients add EX fields to SCH to denote which extension files should have. This can lead to a situation where the large bulk of extensions are of similar "type", e.g. audio files or documents. This extension intend to add a field GR which groups multiple extensions. In addition, the field RX shall be used for group-exclusion; if all extensions in a group but two are desired, field RX will be used to exclude those group items.</p></div>
+<div class="paragraph"><p>Signal SEGA in the INF&#8217;s SU field for support of this extension.</p></div>
+<div class="paragraph"><p>Field GR values, where multiple groups are specified by adding the numbers together:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">1</p></td>
+<td align="left" valign="top"><p class="table">Audio</p></td>
+<td align="left" valign="top"><p class="table">APE, FLAC, M4A, MID, MP3, MPC, OGG, RA, WAV, WMA</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">2</p></td>
+<td align="left" valign="top"><p class="table">Compressed</p></td>
+<td align="left" valign="top"><p class="table">7Z, ACE, ARJ, BZ2, GZ, LHA, LZH, RAR, TAR, TZ, Z, ZIP</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">4</p></td>
+<td align="left" valign="top"><p class="table">Document</p></td>
+<td align="left" valign="top"><p class="table">DOC, DOCX, HTM, HTML, NFO, ODF, ODP, ODS, ODT, PDF, PPT, PPTX, RTF, TXT, XLS, XLSX, XML, XPS</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">8</p></td>
+<td align="left" valign="top"><p class="table">Executable</p></td>
+<td align="left" valign="top"><p class="table">APP, BAT, CMD, COM, DLL, EXE, JAR, MSI, PS1, VBS, WSF</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">16</p></td>
+<td align="left" valign="top"><p class="table">Picture</p></td>
+<td align="left" valign="top"><p class="table">BMP, CDR, EPS, GIF, ICO, IMG, JPEG, JPG, PNG, PS, PSD, SFW, TGA, TIF, WEBP</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">32</p></td>
+<td align="left" valign="top"><p class="table">Video</p></td>
+<td align="left" valign="top"><p class="table">3GP, ASF, ASX, AVI, DIVX, FLV, MKV, MOV, MP4, MPEG, MPG, OGM, PXP, QT, RM, RMVB, SWF, VOB, WEBM, WMV</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Field RX:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">RX</p></td>
+<td align="left" valign="top"><p class="table">Extensions in a group that are not desired. E.g., "GR1 RXMP3 RXWAV" would include all extensions in the <em>audio</em> group except <em>MP3</em> or <em>WAV</em>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fo_failover_hub_addresses">4.21. FO - Failover hub addresses</h3>
+<div class="paragraph"><p>If a hub goes down, the client&#8217;s only option is to keep re-trying the last known hub address. This extension will add a list of failover hub addresses, field FO, that the client can try to connect to, if the main hub address fail.</p></div>
+<div class="paragraph"><p>Clients should decide the frequency of connection attempts (for the main hub as well as the failover addresses). The client should try connecting in the specified order. The client may decide what to do after the FO-list is exhausted, but recommended is to try to connect to the main hub and continue with the list as before.</p></div>
+<div class="paragraph"><p>The client should display an appropriate message to the user that it has connected to a failover address.</p></div>
+<div class="paragraph"><p>This extension should be implemented, at a minimum, for favourite hubs. If clients have any concerns about where a hub may redirect users to, or about storing the extra state information, then it may avoid implementing this for non-favourite hubs.</p></div>
+<div class="paragraph"><p>Field FO in the hub&#8217;s INF:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">FO</p></td>
+<td align="left" valign="top"><p class="table">Failover hub addresses. Specify well formed ADC or ADCS URI addresses, with multiple addresses separated with a comma. Example; FOadc://example.com:1234,adc://example.net:1234</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fs_free_slots_in_client">4.22. FS - Free slots in client</h3>
+<div class="paragraph"><p>This is an extension that will broadcast the amount of free slots the client has available.</p></div>
+<div class="paragraph"><p>Field FS in the client&#8217;s INF:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">FS</p></td>
+<td align="left" valign="top"><p class="table">Free slots available.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adcs_symmetrical_encryption_in_adc">4.23. ADCS - Symmetrical Encryption in ADC</h3>
+<div class="paragraph"><p>ADCS is an extension that has the goal of adding the TLS/SSL layer just over the TCP layer and beneath the application layer (where ADC runs). This way, the ADC protocol remains unchanged while the connections are encrypted. The connecting party performs a TLS handshake immediately after the TCP connection is established. The ADC handshake is performed and once the TLS connection is established the ADC handshake proceeds as usual.</p></div>
+<div class="paragraph"><p>Encrypted ADC connections can be established using a TLS tunnel, both for hub and for client connections. Certificates can be used to authenticate both hub and user, for example by making the hub the root CA, and only allow clients signed by the hub to connect. Ephemeral keys should be use to ensure forward secrecy when possible.  A future extension or revision of this extension will provide ways to handle certificate based logins, who creates which certificates and who signs what, and all that is not specified in this revision.</p></div>
+<div class="sect3">
+<h4 id="_client_hub_encryption">4.23.1. Client-Hub encryption</h4>
+<div class="paragraph"><p>TLS client-hub connections can be initiated either by negotiating the feature "ADCS" on connection or by using the protocol adcs:// when initiating the connection.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_client_client_encryption">4.23.2. Client-Client encryption</h4>
+<div class="paragraph"><p>TLS client-client connections can be established either by negotiating the feature "ADCS" on connection or by specifying "ADCS/1.0" in the CTM protocol field. Clients supporting encrypted connections must indicate this in the INF SU field with "ADCS".</p></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_application_and_version_separation_in_inf">4.24. Application and version separation in INF</h3>
+<div class="paragraph"><p>This extension adds the parameter <em>AP</em> to the INF to signal application. The current parameter in BASE, VE, will be used for version signalling.</p></div>
+<div class="paragraph"><p>Example:</p></div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph"><p>BINF BBBB APDCPLUSPLUS VE0.782</p></div>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_onid_online_identification">4.25. ONID - Online identification</h3>
+<div class="paragraph"><p>The purpose of the OID and OIR commands is to allow users to exchange information about their accounts on various online services. The OID name has been intentionally chosen to be similar to OpenID, although its spread is broader.</p></div>
+<div class="paragraph"><p>New commands are preferrable here over new INF fields to avoid clogging up its 2-letter identifiers. They also allow for more flexibility: multiple profiles of the same type (OIR only); multiple identification parameters.</p></div>
+<div class="paragraph"><p>The OID command is similar to INF, guaranteeing up-to-date information, whereas OIR follows a request/response scheme. OIR parties are therefore not required to keep their OIR information up-to-date.</p></div>
+<div class="paragraph"><p>Parties supporting OID commands MUST advertise the ONID (ONline IDentification) support in the SU field of their INF.</p></div>
+<div class="paragraph"><p>Parameters of the OID and OIR commands:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Unnamed parameter in first position to designate the service this command is referring to. Known services are listed in the "Known ONID services" (ADC-ONIDServices.txt) document; they are matched case-insensitively. Implementers willing to use an unlisted service SHOULD let ADC managers know about it.
+</p>
+</li>
+<li>
+<p>
+Optional named parameters whose meanings depend on the service in question.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>OID and OIR commands support all contexts (hub-client, client-client). They are allowed in client-client contexts were users to want to avoid their OID/OIR information travelling through hubs. Both clients and hubs MAY provide each other with OID/OIR information.</p></div>
+<div class="sect3">
+<h4 id="_oid">4.25.1. OID</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>OID service</code></pre>
+</div></div>
+<div class="paragraph"><p>Any party that has sent OID information about itself SHOULD keep it up-to-date.</p></div>
+<div class="paragraph"><p>OID parties MAY provide no information, usually indicating a refusal or inability to communicate it.</p></div>
+<div class="paragraph"><p>Hubs that advertise ONID support MUST dispatch OID information they have received from clients to new clients logging in, similary to INF information.</p></div>
+<div class="paragraph"><p>Clients MAY send OID commands to other clients on hubs that do not advertise ONID support.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_oir">4.25.2. OIR</h4>
+<div class="literalblock">
+<div class="content">
+<pre><code>OIR service</code></pre>
+</div></div>
+<div class="paragraph"><p>The requesting party MUST send an OIR command with a service parameter only (no optional parameter). The responding party MAY answer with an OIR command containing that same service parameter, and relevant optional parameters.</p></div>
+<div class="paragraph"><p>The responding party MAY send multiple OIR commands in response to one request.</p></div>
+<div class="paragraph"><p>The responding party MAY provide no information, usually indicating a refusal or inability to communicate it.</p></div>
+<div class="paragraph"><p>Any party MAY at any time send an OIR response without any prior request.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_examples_2">4.25.3. Examples</h4>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<thead>
+<tr>
+<th align="left" valign="top">Command </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">BOID BBBB LoL SUtest SEkr</p></td>
+<td align="left" valign="top"><p class="table">A notification of League of Legends service with the summoner name "test" in the region "Korea".</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">BOID BBBB LoL SUtest2</p></td>
+<td align="left" valign="top"><p class="table">An updated notification of the League of Legends service with the new summoner name "test2".</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">BOIR BBBB Google <a href="mailto:EMexample@gmail.com">EMexample@gmail.com</a></p></td>
+<td align="left" valign="top"><p class="table">A notification of the Google service with the e-mail "example@gmail.com".</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">BOIR BBBB mslive <a href="mailto:EMexample@hotmail.com">EMexample@hotmail.com</a></p></td>
+<td align="left" valign="top"><p class="table">A notification of the Microsoft Live service with the e-mail "example@hotmail.com".</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">BOIR BBBB mslive</p></td>
+<td align="left" valign="top"><p class="table">A request for notifications of the Microsoft Live service.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">DOIR CCCC BBBB mslive <a href="mailto:EMexample@live.com">EMexample@live.com</a></p></td>
+<td align="left" valign="top"><p class="table">A response for the notification request from BBBB.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adcs_transfers_are_required_error_code">4.26. "ADCS transfers are required" error code</h3>
+<div class="paragraph"><p>This extension will add "ADCS transfers are required" as error code in STA. A client that has chosen to only allow encrypted transfers (with ADCS) should send this when a user without ADCS support tries to initiate a connection (via CTM/RCM etc).</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">62</p></td>
+<td align="left" valign="top"><p class="table">ADCS transfers are required. Flag "TO" is the token in the transfer request.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_asch_extended_searching_capability">4.27. ASCH - Extended searching capability</h3>
+<div class="paragraph"><p>This extension will increase searching capability in BASE. The extension also imply that searching in partial file lists are now easier.</p></div>
+<div class="paragraph"><p>Signal ASCH in the INF&#8217;s SU field.</p></div>
+<div class="paragraph"><p>The SCH command is extended to request a response (STA) indicating how many search results were sent. This will allow clients to indicate that all search results have been received (and can aptly indicate as such to the user). STA severity 0 and code 00 should be used.</p></div>
+<div class="paragraph"><p>Additional SCH fields:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">MT</p></td>
+<td align="left" valign="top"><p class="table">Matching options. Only applies to search terms (AD) and not excluded terms (EX).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">PP</p></td>
+<td align="left" valign="top"><p class="table">Indicating whether the responding party should send the parent path of the matching item. For files the result should be for the containing files and for directories the result is for the parent directory. The responder should check that only one result is sent for each directory. This is useful when searching in a partial list, so the requester can then download the partial list from a correct path and locate the matching items in the directory by itself (less search results to send).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">OT</p></td>
+<td align="left" valign="top"><p class="table">Older than. Newest possible (absolute) time for a responded item. Time specified is seconds since the Unix epoch.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">NT</p></td>
+<td align="left" valign="top"><p class="table">Newer than. Oldest possible (absolute) time for a responded item. Time specified is seconds since the Unix epoch.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">MR</p></td>
+<td align="left" valign="top"><p class="table">Maximum number of wanted results (implementations should be conservative in which message type). The responder may also choose to send less results if the requested count isn&#8217;t reasonable.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">PA</p></td>
+<td align="left" valign="top"><p class="table">Path in the share where to search from (relative to the unnamed root). This only makes sense for certain message types.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">RE</p></td>
+<td align="left" valign="top"><p class="table">Require a STA reply. This only makes sense for certain message types.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>MT field:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">1</p></td>
+<td align="left" valign="top"><p class="table">Match full path (partial match).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">2</p></td>
+<td align="left" valign="top"><p class="table">Match file/directory name only (partial match).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">3</p></td>
+<td align="left" valign="top"><p class="table">Match file/directory name only (exact match).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>PP field:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">1</p></td>
+<td align="left" valign="top"><p class="table">Send parent path.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>RE field:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">1</p></td>
+<td align="left" valign="top"><p class="table">Require a reply.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Additional RES fields:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">FI</p></td>
+<td align="left" valign="top"><p class="table">Number of files in a directory (recursive, directory search results only).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">FO</p></td>
+<td align="left" valign="top"><p class="table">Numbers of folders in a directory (recursive, directory search results only).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">DA</p></td>
+<td align="left" valign="top"><p class="table">Modified date of a file or directory. Time specified is seconds since the Unix epoch.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Additional STA fields:</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">FC</p></td>
+<td align="left" valign="top"><p class="table">The FCC of the search command (e.g. BSCH, DSCH).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">TO</p></td>
+<td align="left" valign="top"><p class="table">Search token.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">RC</p></td>
+<td align="left" valign="top"><p class="table">Number of results sent. The client receiving the search should still send the STA with a 0 here, in the event that there were not hits to the aformentioned search.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_em_date_em_attribute_in_file_list_for_files_and_directories">4.28. <em>Date</em> attribute in file list for files and directories</h3>
+<div class="paragraph"><p>This extension adds a <em>Date</em> attribute to files and directories in a file list. The attribute is the last modified date of the file or directory. Time specified is seconds since the Unix epoch.</p></div>
+<div class="paragraph"><p>Implementations should be conservative when it includes the Date attribute. Only including the attribute in partial file lists can decrease overall network load requirements.</p></div>
+<div class="paragraph"><p>The following changes are done to the file list XML schema:</p></div>
+<div class="paragraph"><p>A new attribute is defined:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;xs:attribute name="Date" type="xs:unsignedLong" /&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>The attribute is then referenced in the File and Directory element:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;xs:attribute ref="Date" use="optional" /&gt;</code></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_em_size_em_attribute_in_file_list_for_directories">4.29. <em>Size</em> attribute in file list for directories</h3>
+<div class="paragraph"><p>This extension adds a <em>Size</em> attribute to directories in a file list. The attribute is the size of the directory as indicated in a RES.</p></div>
+<div class="paragraph"><p>Implementations should be conservative when it includes the Size attribute.</p></div>
+<div class="paragraph"><p>This attribute only makes sense in partial file lists (as it can be calculated in full lists).</p></div>
+<div class="paragraph"><p>The following change is done to the file list XML schema:</p></div>
+<div class="paragraph"><p>The Size attribute from BASE is referenced in the Directory element:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;xs:attribute ref="Size" use="optional" /&gt;</code></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_em_children_em_attribute_in_file_list_for_directories">4.30. <em>Children</em> attribute in file list for directories</h3>
+<div class="paragraph"><p>This extension adds a <em>Children</em> attribute to directories in a file list. The attribute indicates whether there are additional sub-directories.</p></div>
+<div class="paragraph"><p>Value <em>1</em> indicate that there are children.</p></div>
+<div class="paragraph"><p>This attribute only makes sense in partial file lists.</p></div>
+<div class="paragraph"><p>The following changes are done to the file list XML schema:</p></div>
+<div class="paragraph"><p>A new attribute is defined:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;xs:attribute name="Children" type="zeroOne" /&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>The attribute is then referenced in the Directory element:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;xs:attribute ref="Children" use="optional" /&gt;</code></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_downloaded_progress_report_for_uploaders_in_get">4.31. Downloaded progress report for uploaders in GET</h3>
+<div class="paragraph"><p>The info in the current GET command does not permit displaying relative upload progress for the uploading party (for the whole file).</p></div>
+<div class="paragraph"><p>To address this, this extension will add an additional field to the GET command for current downloaded (and verified) bytes before the request has been sent. While still not entirely accurate with this information, the uploader can see how much of the file the requesting party actually has instead of either assuming that the requester has the file up to the start position of the request or being forced to only show the progress of the currently requested part of the file. There is potentially a slight delay in the reporting of this info in scenarios where more than one segment of a file is simultaneously requested (by the downloader) and the uploader still lacks information about how many other sources the file is being downloaded from.</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">DB</p></td>
+<td align="left" valign="top"><p class="table">Downloaded (and verified) bytes.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rdex_redirects_extended">4.32. RDEX - Redirects Extended</h3>
+<div class="paragraph"><p>The goal of this extension is to enhance the redirect capabilities provided by BASE by adding support for two new redirect operations and a way for hubs and clients to communicate accepted redirect protocols. It also attempts to make the concept of redirects more unambiguous and less implementation defined. The two new types of redirects added are a multiple choice redirect and so-called permanent redirect as outlined below. These new redirect types are not necessarily mutually exclusive.</p></div>
+<div class="sect3">
+<h4 id="_redirect_security">4.32.1. Redirect Security</h4>
+<div class="paragraph"><p>Hubs should always aim to include as much information pertaining to a redirect as possible using other fields defined in BASE. Clients may, for example, rely on the availability of such information to check the origin of a redirect before making irreversible decisions, such as accepting a redirect as permanent as defined below.</p></div>
+<div class="paragraph"><p>Clients should not attempt to connect to an unreachable or otherwise invalid destination resources indefinitely or in otherwise abusive manner when responding to redirects. Whether clients respond to redirects using default user information or the same information as used on the hub that initiated the redirect is implementation defined, however, in the case that the same information is used careful consideration should be taken when it comes to automatically sending sensitive information such as passwords to other hubs especially if it provides less security to the user than the original hub.</p></div>
+<div class="paragraph"><p>Both clients and hubs should also take note that the TL field, as defined by BASE, should only impact the current hub and its connection (if re-established) thus it should not be relied on to trigger a delayed response to a redirect.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_accepted_redirect_protocols">4.32.2. Accepted Redirect Protocols</h4>
+<div class="paragraph"><p>Support for this extension is indicated by the presence of an RP field in the INF, which defines the accepted redirect protocols for the hub or a client as a bitmask using any combination of following values. Additional compatible values may be defined by other extensions.</p></div>
+<div class="tableblock">
+<table rules="all"
+width="100%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+<thead>
+<tr>
+<th align="left" valign="top">Protocol </th>
+<th align="left" valign="top">URI Syntax </th>
+<th align="left" valign="top">Flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">User action (exclusive)</p></td>
+<td align="left" valign="top"><p class="table">any supported, as defined below</p></td>
+<td align="left" valign="top"><p class="table">0</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">ADC (BASE)</p></td>
+<td align="left" valign="top"><p class="table">adc://adress:port</p></td>
+<td align="left" valign="top"><p class="table">1</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><a href="#anchor-ADCS">ADCS Extension</a></p></td>
+<td align="left" valign="top"><p class="table">adcs://address:port</p></td>
+<td align="left" valign="top"><p class="table">2</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><a href="http://nmdc.sf.net">NeoModus Direct Connect</a></p></td>
+<td align="left" valign="top"><p class="table">dchub://address[:port]</p></td>
+<td align="left" valign="top"><p class="table">4</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Hubs should treat the absence of the RP field in clients INF as the equivalent of RP with the value of one, thus implying support for BASE. If the ADCS feature is included in the clients feature list this may also be amended to include ADCS. If a client does not define an RP field the hub may choose to omit the RDEX syntax from redirects, although this extension retains full backwards compatibility with BASE. If a hub defines an RP field for itself it should prevent its users from redirecting others to protocols it did not define, including redirects to destinations without an explicit protocol handler. Hubs should always aim to use fully qualified resource identifiers for all redirects, regardless of whether an RP field is defined or not, to avoid ambiguous destinations due to implementation defined default handling.</p></div>
+<div class="paragraph"><p>Clients should refrain from removing support of a previously signalled redirect protocol from their RP field. It is up to the hub to decide a corresponding course of action should the client do so. Additionally a special case is defined for clients as an RP field with the value of zero to indicate that the client may not react to redirects as defined by BASE or this extension at all or may do so only as a result of user action. As such clients defining a non-zero RP field should follow redirects to accepted protocols automatically and conversely any attempts to redirect clients that define RP as zero should result in normal disconnection as per BASE.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_multiple_choice_redirect">4.32.3. Multiple Choice Redirect</h4>
+<div class="paragraph"><p>Multiple choice redirect is defined as a redirect where instead of a single destination resource a set of resource identifiers is provided. The methodology that is used to select the final destination resource for a multiple choice redirect is implementation defined. However, only one final destination resource may be chosen. For example a particular implementation may prefer one protocol over another, encrypted connection over an unencrypted one or even simply choose one at random.</p></div>
+<div class="paragraph"><p>This type of redirect is signalled by the presence of an additional RX field in the QUI as defined for redirects by BASE. The value of the RX field is a comma separated list of resource identifiers to use in the redirect. The RD field should be defined for maximum compatibility and clients should add its value to the list of identifiers defined in RX when selecting the final destination resource.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_permanent_redirect">4.32.4. Permanent Redirect</h4>
+<div class="paragraph"><p>Permanent redirect is defined as a redirect with reference updating. In the case of a permanent redirect, if and only if a successful connection is made to the destination resource, the connecting party will then update all relevant references of the original resource to the destination resource. Examples of such references may be hublist records for pingers or favorite entries for clients.</p></div>
+<div class="paragraph"><p>This type of redirect is signalled by the presence of an additional PT field in the QUI, as defined for redirects by BASE, with the value of one. Upon receiving such redirect clients will proceed to update references as outlined above provided the conditions are met.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_examples_3">4.32.5. Examples</h4>
+<div class="paragraph"><p>Multiple Choice Redirect (BASE compliant)</p></div>
+<div class="tableblock">
+<table rules="all"
+width="100%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="50%" />
+<col width="50%" />
+<thead>
+<tr>
+<th align="left" valign="top">Example </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">IQUI BBBB IDAAAA RDadc://example.com:1001 RXadcs://example.com:1002,adc://example.org:1020</p></td>
+<td align="left" valign="top"><p class="table">Here user BBBB is presented with a choice between three destinations Two on example.com and one on example.org. Old and non-supporting clients will be redirected to adc://example.com:1001. User AAAA is the originator for this redirect.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Multiple Choice Redirect (RDEX only, not compatible with old clients thus not recommended)</p></div>
+<div class="tableblock">
+<table rules="all"
+width="100%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="50%" />
+<col width="50%" />
+<thead>
+<tr>
+<th align="left" valign="top">Example </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">IQUI BBBB IDAAAA RXadc://example.com:1001,adcs://example.com:1002,adc://example.org:1020</p></td>
+<td align="left" valign="top"><p class="table">For clients supporting RDEX this is the same as sending the first example. Old and non-supporting clients will be disconnected and they might reconnect to the original hub after an implementation defined time.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Permanent Redirect</p></div>
+<div class="tableblock">
+<table rules="all"
+width="100%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="50%" />
+<col width="50%" />
+<thead>
+<tr>
+<th align="left" valign="top">Example </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">IQUI BBBB IDAAAA MSWe&#8217;re\smoving! RDadc://example.com:1001 PT1</p></td>
+<td align="left" valign="top"><p class="table">Here user BBBB will be redirected to adc://example.com:1001 with the message of "We&#8217;re moving!" and AAAA as the originator. BBBB should (see section Redirect Security) connect directly to adc://example.com:1001 in the future.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="paragraph"><p>Permanent Multiple Choice Redirect</p></div>
+<div class="tableblock">
+<table rules="all"
+width="100%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="50%" />
+<col width="50%" />
+<thead>
+<tr>
+<th align="left" valign="top">Example </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">IQUI BBBB IDAAAA MSWe\shave\sADCS\snow! RDadc://example.com:1001 RXadcs://example.com:1002 PT1 TL0</p></td>
+<td align="left" valign="top"><p class="table">Here user BBBB is redirected permanently with a choice between ADC and ADCS URI, if and only if either of the URI&#8217;s matches the URI of the current hub connection and the matching URI is chosen BBBB will reconnect immediately. Sending a redirect like this to all connected clients (once) can be used to attempt to migrate them to ADCS instance of a hub.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2015-02-19 21:21:48 CET
+</div>
+</div>
+</body>
+</html>

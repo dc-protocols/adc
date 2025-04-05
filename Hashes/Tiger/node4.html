@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD>
+<TITLE> Security</TITLE>
+</HEAD>
+<BODY>
+<meta name="description" value=" Security">
+<meta name="keywords" value="tiger">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+ <BR> <HR><A NAME=tex2html50 HREF="node5.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html48 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html42 HREF="node3.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html51 HREF="node5.html"> Summary</A>
+<B>Up:</B> <A NAME=tex2html49 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html43 HREF="node3.html"> Specification</A>
+<BR> <HR> <P>
+<H1><A NAME=SECTION00040000000000000000> Security</A></H1>
+<P>
+<OL><LI> The nonlinearity comes mostly from S-boxes from 8 bits to 64 bits. This
+is much better than merely combining additions and XORs (i.e., using the carry
+bits), and it affects all the output bits, not just neighboring bits.
+<P>
+<LI> There is a strong avalanche, in that each message bit affects all the
+three registers after three rounds --- much faster than in any other hash
+function.  The avalanche in 64-bit words (and 64-bit S boxes) is much faster
+than when shorter words are used.
+<P>
+<LI> As remarked above, all shortcut attacks on MD*/Snefru target one of the
+intermediate blocks. Increasing the intermediate value to 192 bits helps thwart
+these attacks.
+<P>
+<LI> The key schedule ensures that changing a small number of bits in a
+message affects many bits during the various passes. Together with the strong
+avalanche, it helps Tiger to resist attacks similar to Dobbertin's differential
+attack on MD4 (where changing certain bits in the message affects at most two
+bits in many rounds, and then these small differences can be made to cancel out
+in the last pass).
+<P>
+<LI> The multiplication of the register <tt> b</tt> in each round also contributes
+to the resistance to such attacks, since it ensures that bits which were used
+as inputs to S boxes in the previous rounds are mixed into other S boxes as
+well, and to the same S boxes with a different input difference.  This
+multiplication also prevents related-key [B94] attacks on the hash function,
+since the constant differs in each round.
+<P>
+<LI> The feedforward prevents meet-in-the-middle birthday attacks that find
+preimages of the hash function (although their complexity would be <IMG  ALIGN=BOTTOM ALT="" SRC="img14.gif">
+anyway).
+<P>
+</OL><BR> <HR>
+<P><ADDRESS>
+<I>Eli Biham <BR>
+Thu Feb  8 15:00:23 IST 1996</I>
+</ADDRESS>
+</BODY>

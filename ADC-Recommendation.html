@@ -1,0 +1,1572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc3 3.2.3" />
+<title>ADC Recommendations</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc3 xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+pre {
+  white-space: pre-wrap;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; vertical-align: text-bottom; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(4);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>ADC Recommendations</h1>
+<span id="author">version 1.2.0, UNRELEASED</span><br />
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_abstract">1. Abstract</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>These are the official recommendations to ADC. This document is based on the information contained in the ADC documents, ADC wiki and ADC blog. Information is this document should be taken as guide lines to implementations.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_version_history">2. Version history</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The latest draft of the next version of this document as well as intermediate
+and older versions can be downloaded from
+$URL: <a href="https://svn.code.sf.net/p/adc/code/trunk/ADC-Recommendation.txt">https://svn.code.sf.net/p/adc/code/trunk/ADC-Recommendation.txt</a> $.</p></div>
+<div class="paragraph"><p>This version corresponds to $Revision: 1 $.</p></div>
+<div class="sect2">
+<h3 id="_version_1_2_0_unreleased">2.1. Version 1.2.0, UNRELEASED</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Added client and hub implementation outlines
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_1_0_2013_12_21">2.2. Version 1.1.0, 2013-12-21</h3>
+<div class="paragraph"><p>Fredrik Ullner, &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Added ZLIB recommendation
+</p>
+</li>
+<li>
+<p>
+Added SID recommendations/considerations.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_1_0_0_2010_07_01">2.3. Version 1.0.0, 2010-07-01</h3>
+<div class="paragraph"><p>Fredrik Ullner, &lt;<a href="mailto:ullner@gmail.com">ullner@gmail.com</a>&gt;</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Initial release
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_general_recommentations">3. General recommentations</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Message length
+Messages can be constructed to be long or short with varying complexity. All messages that contain a positional parameter can also contain additional named parameters. This mean that implementations must be able to read enough data to accuratley be aware of additional data. This also means that it may be in the implementations' interest to stop processing after an excessive amount of data, but implementations should strive to be as resiliant as possible. Certain messages that require parsing of specific parts, their context and content (e.g. regular expressions) may very well be short but nontheless pose a security issue if not dealt with appropriately.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sta_recommendations">4. STA recommendations</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Clients should display text messages appropriately depending on context, severity and error code. It is recommended to display the error message regardless of the error code. Hubs must not depend on where clients display error codes.</p></div>
+<div class="paragraph"><p>While STA messages require a severity to accompany the error code, the severity may not be of importance to some error codes or are simply implied by the actual error code. However, it is important that the severity is sent as appropriate and is accurate. STA messages with 0 (success) for severity can usually be regarded by implementations that the information require little or no counter-action.
+The following list include error codes that make no or little sense in one or many severities, and a description why they are best used in one or only some severities. The descriptive text for the error codes can be seen in the STA specification, but may be re-stated as part of the description why they can have severity restriction(s).</p></div>
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col />
+<col />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">11</p></td>
+<td align="left" valign="top"><p class="table">If the hub is full, it makes little sense in keeping the client in some "connected" state. The recommended severity is to use 2 (fatal) to force the client to reconnect at a later time.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">12</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 11.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">21</p></td>
+<td align="left" valign="top"><p class="table">While potentially fatal, the client may resend its INF with a new NI field. The recommended severity for hubs is to use 2 (fatal) but they can use 1 (recoverable).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">22</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 21.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">23</p></td>
+<td align="left" valign="top"><p class="table">An invalid password depend on whether the hub wish to allow the client to resend its password (say, if the transmission became garbled). However, the recommended severity is to use 2 (fatal) unless under special circumstances, for some clients or for some users.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">24</p></td>
+<td align="left" valign="top"><p class="table">The recommended severity is to use 2 (fatal).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">25</p></td>
+<td align="left" valign="top"><p class="table">Can be 1 (recoverable) or 2 (fatal) but generally not 0 (sucess).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">26</p></td>
+<td align="left" valign="top"><p class="table">If the user is not registered in the hub, it makes little sense to try to reconnect immediately. The recommended severity is to use 2 (fatal).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">27</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 24.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">30</p></td>
+<td align="left" valign="top"><p class="table">The recommended severity is to use 2 (fatal).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">31</p></td>
+<td align="left" valign="top"><p class="table">Must be 2 (fatal).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">32</p></td>
+<td align="left" valign="top"><p class="table">Must be 2 (fatal).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">43</p></td>
+<td align="left" valign="top"><p class="table">Information that is missing or is bad is generally grounds for a disconnect but may be recoverable under certain states. The recommended severity is to use 2 (fatal).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">44</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 43.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">45</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 43.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">46</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 43.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">47</p></td>
+<td align="left" valign="top"><p class="table">Must be 2 (fatal).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">50</p></td>
+<td align="left" valign="top"><p class="table">May be cause for a disconnect but is generally recoverable. The recommended severity is to use 1 (recoverable).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">51</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 50.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">52</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 50.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">53</p></td>
+<td align="left" valign="top"><p class="table">Similar to error code 11.</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">54</p></td>
+<td align="left" valign="top"><p class="table">Must be 2 (fatal).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_zlib_compression">5. ZLIB compression</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_generic">5.1. Generic</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Try to keep constant and almost constant named parameters together, that way there is a higher likelyhood for a longer parameter match.
+</p>
+</li>
+<li>
+<p>
+When possible try to keep similar commands no more than a window size (usually 32 bits if highest rate is used) away, that ensures you will benefit from the redundancy provided by these (this may be particularly important when sending large strings like MOTDs or help and configuration values intertwined with other commands).
+</p>
+</li>
+<li>
+<p>
+Syncing is important to keep the clients updated but when you sync some bytes are sent (the sync ones and the ones for the Huffman tree of the new packet if it is a type 2 packet) as such it may make sense to keep in different queues commands depending on how much latency matters for them, for example you may want to keep low latency for MSG commands and send them frequently but may prefer to send searches or passive results together each half second or so. Also latencies matter depending on the type of network, on a LAN users expect most things to happen almost inmediately (especially things like MSGs) whilst clients connecting over a classic DSL line may not care that much for higher latencies.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sid_generation">6. SID generation</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The following are different algorithms for hubs to allocate and assign session IDs (SIDs) to clients.</p></div>
+<div class="sect2">
+<h3 id="_background">6.1. Background</h3>
+<div class="paragraph"><p>In ADC the Session ID (or SID) uniquely identifies a user while connected to a hub, and the user will be assigned a SID at the time of login. Once assigned, the SID cannot be changed without a reconnect.</p></div>
+<div class="paragraph"><p>The SID is a 4 byte sequence of Base32 characters consisting of 32 possible characters, A-Z and 2-7. This means there can be 32^4 different SIDs (slightly over 1 million).</p></div>
+</div>
+<div class="sect2">
+<h3 id="_algorithms">6.2. Algorithms</h3>
+<div class="paragraph"><p>The following algorithms are ways one can manage the SIDs that are assigned.</p></div>
+<div class="sect3">
+<h4 id="_random_sid_allocation">6.2.1. Random SID allocation</h4>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+When client logs in: SID = random number between 1 and 1048576.
+</p>
+</li>
+<li>
+<p>
+if (SID in use) go to 1.
+</p>
+</li>
+<li>
+<p>
+Assign SID to user.
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>Advantages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Very simple to implement.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Disadvantages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Theoretically, if a hub has close to the maximum allowed users (1 million), the algorithm of generating a unique SID becomes very costly. On a hub consiting of a few thousand users this is negligible if looking up users based on SID is fast.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Notes:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The algorithm requires that lookup of users must be as cheap as possible.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="_incremental_sid_allocation">6.2.2. Incremental SID allocation</h4>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+When hub starts, set: counter = 0
+</p>
+</li>
+<li>
+<p>
+When client logs in: SID = ((++counter) % 1048576)
+</p>
+</li>
+<li>
+<p>
+if (counter &gt; 1048576) and (SID == 0 or in use) go to 2.
+</p>
+</li>
+<li>
+<p>
+Assign SID to user.
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>Advantages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Simple to implement.
+</p>
+</li>
+<li>
+<p>
+For the first 1048576 allocated SIDs one does not need to check for SID collisions.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Disadvantages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Information leak: Assuming less than 1 million login attempts have been made, one can easily figure out how many users have logged in before.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Notes:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The algorithm requires that lookup of users must be as cheap as possible.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="_pre_allocated_recyclable_sids">6.2.3. Pre-allocated recyclable SIDs</h4>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+Allocate a queue large enough to contain SIDs for the maximum users allowed (or dynamically, regarding the user count and the maximum allowed)
+</p>
+</li>
+<li>
+<p>
+Pre-initialize the queue with unique SIDs (for example in ascending order)
+</p>
+</li>
+<li>
+<p>
+When client logs in: Assign the first SID from the end of the queue
+</p>
+</li>
+<li>
+<p>
+When client logs out: push the SID to the beginning of the queue
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>Advantages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+No need to check for duplicate SIDs when users log in.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Disadvantages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+If max_users is too large, a lot of memory is allocated but not used (one can allocate as users come in, the maximum user count would be just a reference)
+</p>
+</li>
+<li>
+<p>
+If the queue is kept as a linked list of SIDs, even more memory is allocated.
+</p>
+</li>
+<li>
+<p>
+If the queue is kept as an array, a lot of memory moving needs to be performed when users log out.
+</p>
+</li>
+<li>
+<p>
+Changing the maximum users limit while the hub is running is slightly more complicated (see below).
+</p>
+</li>
+<li>
+<p>
+Negligible: While starting up, the hub needs to allocate and fill the queues.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Notes:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Changing the maximum users limit:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+if maximum users is increased, another set of unique SIDs needs to be added to the front of the queue.
+</p>
+</li>
+<li>
+<p>
+if maximum users is decreased, no change is needed, it just means the queue will still have unused elements in it if the hub becomes full (or remove some elements from the not used end of the queue).
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="_incremental_recyclable_sid_allocation">6.2.4. Incremental recyclable SID allocation</h4>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+When hub starts, set counter = 0.
+</p>
+</li>
+<li>
+<p>
+When client logs in: take last element of SID array if exist and delete it or SID = something like ((++counter) % 1048576).
+</p>
+</li>
+<li>
+<p>
+Assign SID to user.
+</p>
+</li>
+<li>
+<p>
+When client logs out: store client SID as last element in SID array.
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>Advantages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Simple to implement.
+</p>
+</li>
+<li>
+<p>
+You never need to check collisons.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Disadvantages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Information leak: you can find out the max user peak of the hub in a session.
+</p>
+</li>
+<li>
+<p>
+The SID array grows when more clients logout then login; in worst case, the hub is empty and the array contains all created SIDs of the session.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_client_implementation">7. Client implementation</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>A client can be implemented by following this rough outline. The outline may not specify everything to full detail and will not cover the actual application that shall employ the mechanisms.</p></div>
+<div class="paragraph"><p>There are six sections that need to be implemented to support the major parts of the protocol. They are, in order: connectivity, chatting, downloading, sharing/uploading, search/response. The left out section ("other") is strict protocol compatibility, for additional items that are not necessary to support at first: these things should be implemented alongside basic support for each section.</p></div>
+<div class="paragraph"><p>This outline assumes that there is a hub available and (for the relevant sections) that another client is present.</p></div>
+<div class="paragraph"><p>No part of this outline requires a particular programming language.</p></div>
+<div class="paragraph"><p>Note that all messages end with a newline, which are excluded from this description.</p></div>
+<div class="sect2">
+<h3 id="_connectivity">7.1. Connectivity</h3>
+<div class="paragraph"><p>This section describes the necessary parts to implement basic connectivity to a hub. The client will, after this stage, be able to continue on with chatting or file sharing. Without basic connectivity, obviously nothing can done in the client.</p></div>
+<div class="sect3">
+<h4 id="_steps">7.1.1. Steps</h4>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+Create a network connection to a hub on the appropriate port.
+</p>
+</li>
+<li>
+<p>
+The client shall send the following message:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+HSUP ADBASE ADTIGR
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+This indicates that the client is notifying the hub about supporting the base protocol (BASE) and the extension hash method Tiger (TIGR). If the protocol base version is changed, send that instead of BASE. Similarly, if another hash method is preferred, send that instead.
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+The hub will send:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+ISUP ADBASE ADTIGR
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+The hub may include other things it "AD"s, but none of these are interesting.
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+The hub will send:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+ISID ABCD
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+ABCD is the SID that shall be used in any further communication from the client (where applicable). Store this value.
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Optionally, a hub may send the following but is not required:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+IINF CT32 NIhub_name
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+None of these parameters are needed for continuing the connectivity, although may come in handy in the future. The value in the NI parameter can be used for e.g. the application or tab name.
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+The client shall send the following message
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+BINF ABCD ID&lt;CID&gt; PD&lt;PID&gt; NImy_name
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+ABCD here is the SID as previously mentioned. The CID and PID are complementary information and are specified in the "Client identification section". The client should generate an internal CID (and associated PID). The CID and PID that the client sends to the hub have been run through a Base32 conversion.
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+If the hub did not send its "IINF" before, it may do so now. Again, the information shouldn&#8217;t be deemed as required.
+</p>
+</li>
+<li>
+<p>
+The hub may send a password request, see section "Other".
+</p>
+</li>
+<li>
+<p>
+The hub will send all other users that are logged in:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+BINF sid ID&lt;CID&gt; NI&lt;nick&gt;
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Where SID and CID is the client information. The SID is used to create a mapping between client &#8594; user. Note that the PID is never broadcast.
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+The last BINF to arrive will be the information you connected with:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+BINF ABCD ID&lt;your-CID&gt; NImy_name
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+The client will now be fully logged in.
+</p>
+</li>
+</ol></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chat">7.2. Chat</h3>
+<div class="paragraph"><p>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_downloading">7.3. Downloading</h3>
+<div class="paragraph"><p>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_sharing">7.4. Sharing</h3>
+<div class="paragraph"><p>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_search">7.5. Search</h3>
+<div class="paragraph"><p>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_other">7.6. Other</h3>
+<div class="paragraph"><p>.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_hub_implementation">8. Hub implementation</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>A client can be implemented by following this rough outline. The outline may not specify everything to full detail and will not cover the actual application that shall employ the mechanisms.</p></div>
+<div class="sect2">
+<h3 id="_steps_2">8.1. Steps</h3>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+Hub accepts network connection.
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Set client state to NEW.
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Hub waits for handshake from client.
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Client will send:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+HSUP ADBASE &#8230;
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Hub checks support line responds.
+</p>
+</li>
+<li>
+<p>
+Server sends:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+ISUP ADBASE &#8230;
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Hub allocates a SID, and sends it to the client:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+ISID &#8230;
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Hub sends the hub information to the client:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+IINF &#8230;
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Hub waits for client to send info:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Client will send:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+BINF &#8230;
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Set client state to IDENTIFY.
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Hub validates info from client
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+If password verification is needed, then go to 9, otherwise 11.
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+If user needs to log in, request password
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Set client state to VERIFY
+</p>
+</li>
+<li>
+<p>
+Hub sends:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+IGPA &#8230;
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Wait for and verify password from client:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+HPAS &#8230;
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Hub transmits the userlist of all existing users to the client.
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>BINF ...
+BINF ...
+...
+BINF ...</code></pre>
+</div></div>
+</li>
+<li>
+<p>
+Hub broadcasts the client&#8217;s info (BINF) to all users, including the client.
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Set client state to NORMAL.
+</p>
+</li>
+<li>
+<p>
+Server sends:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+BINF &#8230;
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+At this point the client is considered logged in, and will receive all
+broadcast messages and all direct messages from other clients.
+It will also forward messages originating from this client to others, if the
+messages are correct (syntax, formatting, source SID, etc).
+</p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2015-02-21 17:56:23 CET
+</div>
+</div>
+</body>
+</html>

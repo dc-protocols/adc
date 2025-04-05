@@ -1,0 +1,878 @@
+<html><head>
+
+<script type="text/javascript" src="/static/js/analytics.js" ></script>
+<link type="text/css" rel="stylesheet" href="/static/css/banner-styles.css"/>
+
+
+
+<title>Tree Hash EXchange format (THEX)</title>
+<meta http-equiv="Expires" content="Tue, 04 Mar 2003 22:41:32 +0000">
+<STYLE type='text/css'>
+    .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
+             font-family: helvetica, arial, sans-serif }
+    .filename { color: #666666; font-size: 18px; line-height: 28px; font-weight: bold; text-align: right;
+                  font-family: helvetica, arial, sans-serif }
+    p.copyright { color: #000000; font-size: 10px;
+                  font-family: verdana, charcoal, helvetica, arial, sans-serif }
+    p { margin-left: 2em; margin-right: 2em; }
+    li { margin-left: 3em;  }
+    ol { margin-left: 2em; margin-right: 2em; }
+    ul.text { margin-left: 2em; margin-right: 2em; }
+    pre { margin-left: 3em; color: #333333 }
+    ul.toc { color: #000000; line-height: 16px;
+             font-family: verdana, charcoal, helvetica, arial, sans-serif }
+    H3 { color: #333333; font-size: 16px; line-height: 16px; font-family: helvetica, arial, sans-serif }
+    H4 { color: #000000; font-size: 14px; font-family: helvetica, arial, sans-serif }
+    TD.header { color: #ffffff; font-size: 10px; font-family: arial, helvetica, san-serif; valign: top }
+    TD.author-text { color: #000000; font-size: 10px;
+                     font-family: verdana, charcoal, helvetica, arial, sans-serif }
+    TD.author { color: #000000; font-weight: bold; margin-left: 4em; font-size: 10px; font-family: verdana, charcoal, helvetica, arial, sans-serif }
+     A:link { color: #990000; font-weight: bold;
+              font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
+     A:visited { color: #333333; font-weight: bold;
+                 font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
+     A:name { color: #333333; font-weight: bold;
+              font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
+    .link2 { color:#ffffff; font-weight: bold; text-decoration: none;
+             font-family: monaco, charcoal, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
+             font-size: 9px }
+    .RFC { color:#666666; font-weight: bold; text-decoration: none;
+           font-family: monaco, charcoal, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
+           font-size: 9px }
+    .hotText { color:#ffffff; font-weight: normal; text-decoration: none;
+               font-family: charcoal, monaco, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
+               font-size: 9px }
+</style>
+</head>
+<body bgcolor="#ffffff" text="#000000" alink="#000000" vlink="#666666" link="#990000">
+<!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script> if (window.archive_analytics) { window.archive_analytics.values['server_name']="wwwb-app19.us.archive.org";}; </script>
+
+<script type="text/javascript" src="/static/js/disclaim-element.js" ></script>
+<script type="text/javascript" src="/static/js/graph-calc.js" ></script>
+<script type="text/javascript" src="/static/jflot/jquery.min.js" ></script>
+<script type="text/javascript">
+//<![CDATA[
+var firstDate = 820454400000;
+var lastDate = 1420070399999;
+var wbPrefix = "/web/";
+var wbCurrentUrl = "http:\/\/www.open-content.net\/specs\/draft-jchapweske-thex-02.html";
+
+var curYear = -1;
+var curMonth = -1;
+var yearCount = 18;
+var firstYear = 1996;
+var imgWidth = 475;
+var yearImgWidth = 25;
+var monthImgWidth = 2;
+var trackerVal = "none";
+var displayDay = "16";
+var displayMonth = "mar";
+var displayYear = "2008";
+var prettyMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function showTrackers(val) {
+	if(val == trackerVal) {
+		return;
+	}
+	if(val == "inline") {
+		document.getElementById("displayYearEl").style.color = "#ec008c";
+		document.getElementById("displayMonthEl").style.color = "#ec008c";
+		document.getElementById("displayDayEl").style.color = "#ec008c";		
+	} else {
+		document.getElementById("displayYearEl").innerHTML = displayYear;
+		document.getElementById("displayYearEl").style.color = "#ff0";
+		document.getElementById("displayMonthEl").innerHTML = displayMonth;
+		document.getElementById("displayMonthEl").style.color = "#ff0";
+		document.getElementById("displayDayEl").innerHTML = displayDay;
+		document.getElementById("displayDayEl").style.color = "#ff0";
+	}
+   document.getElementById("wbMouseTrackYearImg").style.display = val;
+   document.getElementById("wbMouseTrackMonthImg").style.display = val;
+   trackerVal = val;
+}
+function getElementX2(obj) {
+	var thing = jQuery(obj);
+	if((thing == undefined) 
+			|| (typeof thing == "undefined") 
+			|| (typeof thing.offset == "undefined")) {
+		return getElementX(obj);
+	}
+	return Math.round(thing.offset().left);
+}
+function trackMouseMove(event,element) {
+
+   var eventX = getEventX(event);
+   var elementX = getElementX2(element);
+   var xOff = eventX - elementX;
+	if(xOff < 0) {
+		xOff = 0;
+	} else if(xOff > imgWidth) {
+		xOff = imgWidth;
+	}
+   var monthOff = xOff % yearImgWidth;
+
+   var year = Math.floor(xOff / yearImgWidth);
+	var yearStart = year * yearImgWidth;
+   var monthOfYear = Math.floor(monthOff / monthImgWidth);
+   if(monthOfYear > 11) {
+       monthOfYear = 11;
+   }
+   // 1 extra border pixel at the left edge of the year:
+   var month = (year * 12) + monthOfYear;
+   var day = 1;
+	if(monthOff % 2 == 1) {
+		day = 15;
+	}
+	var dateString = 
+		zeroPad(year + firstYear) + 
+		zeroPad(monthOfYear+1,2) +
+		zeroPad(day,2) + "000000";
+
+	var monthString = prettyMonths[monthOfYear];
+	document.getElementById("displayYearEl").innerHTML = year + 1996;
+	document.getElementById("displayMonthEl").innerHTML = monthString;
+	// looks too jarring when it changes..
+	//document.getElementById("displayDayEl").innerHTML = zeroPad(day,2);
+
+	var url = wbPrefix + dateString + '/' +  wbCurrentUrl;
+	document.getElementById('wm-graph-anchor').href = url;
+
+   //document.getElementById("wmtbURL").value="evX("+eventX+") elX("+elementX+") xO("+xOff+") y("+year+") m("+month+") monthOff("+monthOff+") DS("+dateString+") Moy("+monthOfYear+") ms("+monthString+")";
+   if(curYear != year) {
+       var yrOff = year * yearImgWidth;
+       document.getElementById("wbMouseTrackYearImg").style.left = yrOff + "px";
+       curYear = year;
+   }
+   if(curMonth != month) {
+       var mtOff = year + (month * monthImgWidth) + 1;
+       document.getElementById("wbMouseTrackMonthImg").style.left = mtOff + "px";
+       curMonth = month;
+   }
+}
+//]]>
+</script>
+
+<style type="text/css">body{margin-top:0!important;padding-top:0!important;min-width:800px!important;}#wm-ipp a:hover{text-decoration:underline!important;}</style>
+<div id="wm-ipp" lang="en" class="__wb_banner_div" style="display:none; position:relative;padding:0 5px;min-height:70px;min-width:800px">
+
+
+<div id="wm-ipp-inside" class="__wb_banner_div" style="position:fixed;padding:0!important;margin:0!important;width:97%;min-width:780px;border:5px solid #000;border-top:none;background-image:url(/static/images/toolbar/wm_tb_bk_trns.png);text-align:center;-moz-box-shadow:1px 1px 3px #333;-webkit-box-shadow:1px 1px 3px #333;box-shadow:1px 1px 3px #333;font-size:11px!important;font-family:'Lucida Grande','Arial',sans-serif!important;">
+   <table style="border-collapse:collapse;margin:0;padding:0;width:100%;"><tbody><tr>
+   <td style="padding:10px;vertical-align:top;min-width:110px;">
+   <a href="/web/" title="Wayback Machine home page" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wayback-toolbar-logo.png" alt="Wayback Machine" width="110" height="39" border="0"/></a>
+   </td>
+   <td style="padding:0!important;text-align:center;vertical-align:top;width:100%;">
+
+       <table style="border-collapse:collapse;margin:0 auto;padding:0;width:570px;"><tbody><tr>
+       <td style="padding:3px 0;" colspan="2">
+       <form target="_top" method="get" action="/web/form-submit.jsp" name="wmtb" id="wmtb" style="margin:0!important;padding:0!important;"><input type="text" name="url" id="wmtbURL" value="http://www.open-content.net/specs/draft-jchapweske-thex-02.html" style="width:400px;font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;" onfocus="javascript:this.focus();this.select();" /><input type="hidden" name="type" value="replay" /><input type="hidden" name="date" value="20080316033726" /><input type="submit" value="Go" style="font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;margin-left:5px;width: inherit !important" /><span id="wm_tb_options" style="display:block;"></span></form>
+       </td>
+       <td style="vertical-align:bottom;padding:5px 0 0 0!important;" rowspan="2">
+           <table style="border-collapse:collapse;width:110px;color:#99a;font-family:'Helvetica','Lucida Grande','Arial',sans-serif;"><tbody>
+			
+           <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+           <tr style="width:110px;height:16px;font-size:10px!important;">
+           	<td style="padding-right:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20080214024543/http://open-content.net/specs/draft-jchapweske-thex-02.html" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="14 feb 2008"><strong>FEB</strong></a>
+		                
+               </td>
+               <td id="displayMonthEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight:bold;text-transform:uppercase;width:34px;height:15px;padding-top:1px;text-align:center;" title="You are here: 3:37:26 mar 16, 2008">MAR</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20080517043137/http://open-content.net/specs/draft-jchapweske-thex-02.html" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="17 maj 2008"><strong>MAJ</strong></a>
+		                
+               </td>
+           </tr>
+
+           <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+           <tr>
+               <td style="padding-right:9px;white-space:nowrap;overflow:visible;text-align:right!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+		                <a href="/web/20080302051813/http://open-content.net/specs/draft-jchapweske-thex-02.html" title="5:18:13 mar 2, 2008" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wm_tb_prv_on.png" alt="Previous capture" width="14" height="16" border="0" /></a>
+		                
+               </td>
+               <td id="displayDayEl" style="background:#000;color:#ff0;width:34px;height:24px;padding:2px 0 0 0;text-align:center;font-size:24px;font-weight: bold;" title="You are here: 3:37:26 mar 16, 2008">16</td>
+				<td style="padding-left:9px;white-space:nowrap;overflow:visible;text-align:left!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+		                <a href="/web/20080517043137/http://open-content.net/specs/draft-jchapweske-thex-02.html" title="4:31:37 maj 17, 2008" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wm_tb_nxt_on.png" alt="Next capture" width="14" height="16" border="0"/></a>
+		                
+			    </td>
+           </tr>
+
+           <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+           <tr style="width:110px;height:13px;font-size:9px!important;">
+				<td style="padding-right:9px;font-size:11px!important;font-weight: bold;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20070310031709/http://www.open-content.net/specs/draft-jchapweske-thex-02.html" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="10 mar 2007"><strong>2007</strong></a>
+		                
+               </td>
+               <td id="displayYearEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight: bold;padding-top:1px;width:34px;height:13px;text-align:center;" title="You are here: 3:37:26 mar 16, 2008">2008</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight: bold;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20090415152844/http://www.open-content.net/specs/draft-jchapweske-thex-02.html" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="15 apr 2009"><strong>2009</strong></a>
+		                
+				</td>
+           </tr>
+           </tbody></table>
+       </td>
+
+       </tr>
+       <tr>
+       <td style="vertical-align:middle;padding:0!important;">
+           <a href="/web/20080316033726*/http://www.open-content.net/specs/draft-jchapweske-thex-02.html" style="color:#33f;font-size:11px;font-weight:bold;background-color:transparent;border:none;" title="See a list of every capture for this URL"><strong>99 captures</strong></a>
+           <div class="__wb_banner_div" style="margin:0!important;padding:0!important;color:#666;font-size:9px;padding-top:2px!important;white-space:nowrap;" title="Timespan for captures of this URL">13 apr 03 - 28 jun 13</div>
+       </td>
+       <td style="padding:0!important;">
+       <a style="position:relative; white-space:nowrap; width:475px;height:27px;" href="" id="wm-graph-anchor">
+       <div class="__wb_banner_div" id="wm-ipp-sparkline" style="position:relative; white-space:nowrap; width:475px;height:27px;background-color:#fff;cursor:pointer;border-right:1px solid #ccc;" title="Explore captures for this URL">
+			<img id="sparklineImgId" style="position:absolute; z-index:9012; top:0px; left:0px;"
+				onmouseover="showTrackers('inline');" 
+				onmouseout="showTrackers('none');"
+				onmousemove="trackMouseMove(event,this)"
+				alt="sparklines"
+				width="475"
+				height="27"
+				border="0"
+				src="/web/jsp/graph.jsp?graphdata=475_27_1996:-1:000000000000_1997:-1:000000000000_1998:-1:000000000000_1999:-1:000000000000_2000:-1:000000000000_2001:-1:000000000000_2002:-1:000000000000_2003:-1:000101000101_2004:-1:010100011201_2005:-1:222102141122_2006:-1:310301140001_2007:-1:023021303311_2008:2:112010001102_2009:-1:111110010001_2010:-1:000000000000_2011:-1:000000202020_2012:-1:110100100010_2013:-1:003302000000_2014:-1:000000000000"></img>
+			<img id="wbMouseTrackYearImg" 
+				style="display:none; position:absolute; z-index:9010;"
+				width="25" 
+				height="27"
+				border="0"
+				src="/static/images/toolbar/transp-yellow-pixel.png"></img>
+			<img id="wbMouseTrackMonthImg"
+				style="display:none; position:absolute; z-index:9011; " 
+				width="2"
+				height="27" 
+				border="0"
+				src="/static/images/toolbar/transp-red-pixel.png"></img>
+       </div>
+		</a>
+
+       </td>
+       </tr></tbody></table>
+   </td>
+   <td style="text-align:right;padding:5px;width:65px;font-size:11px!important;">
+       <a href="javascript:;" onclick="document.getElementById('wm-ipp').style.display='none';" style="display:block;padding-right:18px;background:url(/static/images/toolbar/wm_tb_close.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;margin-bottom:23px;background-color:transparent;border:none;" title="Close the toolbar">Close</a>
+       <a href="http://faq.web.archive.org/" style="display:block;padding-right:18px;background:url(/static/images/toolbar/wm_tb_help.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;background-color:transparent;border:none;" title="Get some help using the Wayback Machine">Help</a>
+   </td>
+   </tr></tbody></table>
+
+</div>
+</div>
+<script type="text/javascript">
+ var wmDisclaimBanner = document.getElementById("wm-ipp");
+ if(wmDisclaimBanner != null) {
+   disclaimElement(wmDisclaimBanner);
+ }
+</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+
+<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header"> </td><td width="33%" bgcolor="#666666" class="header">J. Chapweske</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Onion Networks, Inc.</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">G. Mohr</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Bitzi, Inc.</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">March 4, 2003</td></tr>
+</table></td></tr></table>
+<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">Tree Hash EXchange format (THEX)</span></b></font></div>
+<font face="verdana, helvetica, arial, sans-serif" size="2">
+
+<h3>Abstract</h3>
+
+<p>
+This memo presents the Tree Hash Exchange (THEX) format, for 
+exchanging Merkle Hash Trees built up from the subrange hashes of discrete 
+digital files. Such tree hash data structures assist in file integrity 
+verification, allowing arbitrary subranges of bytes to be verified before the 
+entire file has been received. 
+</p>
+<a name="toc"><br><hr size="1" shade="0"></a>
+<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<h3>Table of Contents</h3>
+<ul compact class="toc">
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor1">1.</a>&nbsp;
+Introduction<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor2">2.</a>&nbsp;
+Merkle Hash Trees<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor3">2.1</a>&nbsp;
+Hash Functions<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor4">2.2</a>&nbsp;
+Unbalanced Trees<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#choice_of_segment_size">2.3</a>&nbsp;
+Choice Of Segment Size<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor5">3.</a>&nbsp;
+Serialization Format<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor6">3.1</a>&nbsp;
+DIME Encapsulation<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor7">3.2</a>&nbsp;
+XML Tree Description<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor8">3.2.1</a>&nbsp;
+File Size<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor9">3.2.2</a>&nbsp;
+File Segment Size<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor10">3.2.3</a>&nbsp;
+Digest Algorithm<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor11">3.2.4</a>&nbsp;
+Digest Output Size<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor12">3.2.5</a>&nbsp;
+Serialized Tree Depth<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor13">3.2.6</a>&nbsp;
+Serialized Tree Type<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor14">3.2.7</a>&nbsp;
+Serialized Tree URI<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor15">3.3</a>&nbsp;
+Breadth-First Serialization<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor16">3.3.1</a>&nbsp;
+Serialization Type URI<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#rfc.authors">&#167;</a>&nbsp;
+Authors' Addresses<br></b>
+<b><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#anchor17">A.</a>&nbsp;
+Test Vectors<br></b>
+</ul>
+<br clear="all">
+
+<a name="anchor1"><br><hr size="1" shade="0"></a>
+<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;Introduction</h3>
+
+<p>
+The Merkle Hash Tree, invented by Ralph Merkle, is a hash construct that 
+exhibits desirable properties for verifying the integrity of files and file subranges
+in an incremental or out-of-order fashion. This document describes a binary 
+serialization format for hash trees that is compact and optimized for both 
+sequential and random access.
+This memo has two goals:
+
+<ol class="text">
+
+<li>
+To describe Merkle Hash Trees and how they are used for file integrity 
+verification.
+</li>
+
+<li>
+To describe a serialization format for storage and transmission of hash
+trees.
+</li>
+
+</ol>
+<p>
+
+</p>
+
+<a name="anchor2"><br><hr size="1" shade="0"></a>
+<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;Merkle Hash Trees</h3>
+
+<p>
+
+It is common practice in distributed systems to use secure hash algorithms to
+verify the integrity of content.  The employment of secure hash algorithms 
+enables systems to retreive content from completely untrusted hosts with only 
+a small amount of trusted metadata.
+
+</p>
+
+<p>
+
+Typically, algorithms such as SHA-1 and MD5 have been used to check the content 
+integrity after retrieving the entire file.  These full file hash techniques 
+work fine in an environment where the content is received from a single host 
+and there are no streaming requirements. However, there are an increasing 
+number of systems that retrieve a single piece of content from multiple 
+untrusted hosts, and require content verification well in advance of retrieving 
+the entire file.
+
+</p>
+
+<p>
+
+Many modern peer-to-peer content delivery systems employ fixed size "block 
+hashes" to provide a finer level of granularity in their integrity checking.  
+This approach is still limited in the verification resolution it can attain.  
+Additionally, all of the hash information must be retrieved from a trusted host, 
+which can limit the scalability and reliability of the system.
+
+</p>
+
+<p>
+
+Another way to verify content is to use the hash tree approach.  This approach 
+has the desired characteristics missing from the full file hash approach and 
+works well for very large files.  The idea is to break the file up into a number 
+of small pieces, hash those pieces, and then iteratively combine and rehash the 
+resulting hashes in a tree-like fashion until a single "root hash" is created.
+
+</p>
+
+<p>
+
+The root hash by itself behaves exactly the same way that full file hashes do.  
+If the root hash is retrieved from a trusted source, it can be used to verify 
+the integrity of the entire content.  More importantly, the root hash can be 
+combined with a small number of other hashes to verify the integrity of any of 
+the file segments.
+
+<p>
+
+For example, consider a file made up of four segments, 
+S1, S2, S3, and S4. Let H() be the hash function, and '+'
+indicate concatenation. You could take the traditional
+hash value:
+
+</p>
+</font><pre>
+    VALUE=H(S1+S2+S3+S4)
+</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+
+<p>
+
+Or, you could employ a tree approach.  The tree hash utilizes two hash algorithms - one for leaf hashes and one for internal hashes.  Let LH() be the leaf hash function and IH() be the internal hash function:
+
+</p>
+</font><pre>
+
+               ROOT=IH(E+F)
+                /      \
+               /        \
+        E=IH(A+B)       F=IH(C+D)
+        /     \           /    \
+       /       \         /      \
+  A=LH(S1)  B=LH(S2) C=LH(S3)  D=LH(S4)
+
+</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+
+<p>
+
+Now, assuming that the ROOT is retrieved from a trusted source, the integrity
+of a file segment coming from an untrusted source can be checked with a small
+amount of hash data.  For instance, if S1 is received from an untrusted host,
+the integrity of S1 can be verified with just B and F. 
+
+With these, it can be verified that, yes: S1 can be combined up to 
+equal the ROOT hash, even without seeing the other
+segments. (It is just as impractical to create falsified values 
+of B and F as it is to manipulate any good hash function to 
+give desired results -- so B and F can come from untrusted sources
+as well.)
+
+Similarly, if some other untrusted source provides segments
+S3 and S4, their integrity can be easily checked when combined with hash E.
+From segments S3 and S4, the values of C and D and then F can be calculated.
+
+With these, you can verify that S3 and S4 can combine up
+to create the ROOT -- even if other sources are providing bogus S1 and S2 
+segments. Bad info can be immediately recognized and discarded, and
+good info retained, even in situations where you could not even begin
+to calculate a traditional full-file hash.
+
+</p>
+
+</p>
+
+<p>
+
+Another interesting property of the tree approach is that it can be used to
+verify (tree-aligned) subranges whose size is any multiple of the base segment 
+size.
+
+</p>
+
+<p>
+Consider for example an initial segment size of 1,024 bytes, and 
+a file of 32GB. You could verify a single 1,024-byte block, with
+about 25 proof-assist values, or a block of size 16GB, with a single 
+proof-assist value -- or anything in between.
+
+</p>
+
+<a name="rfc.section.2.1"></a><h4><a name="anchor3">2.1</a>&nbsp;Hash Functions</h4>
+
+<p>
+
+The strength of the hash tree construct is only as strong as the underlying hash algorithm.  Thus, it is RECOMMENDED that a secure hash algorithm such as SHA-1 be used as the basis of the hash tree.
+
+</p>
+
+<p>
+
+In order to protect against collisions between leaf hashes and internal hashes, different hash constructs are used to hash the leaf nodes and the internal nodes.  The same hash algorithm is used as the basis of each construct, but a single '1' byte in network byte order, or 0x01 is prepended to the input of the internal node hashes, and a single '0' byte, or 0x00 is prepended to the input of the leaf node hashes.  
+
+</p>
+
+<p>
+
+<p>
+
+Let H() be the secure hash algorithm, for example SHA-1.
+
+</p>
+</font><pre>
+internal hash function = IH(X) = H(0x01, X)
+
+leaf hash function = LH(X) = H(0x00, X)
+</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+
+</p>
+
+<a name="rfc.section.2.2"></a><h4><a name="anchor4">2.2</a>&nbsp;Unbalanced Trees</h4>
+
+<p>
+
+For trees that are unbalanced -- that is, they have a number of leaves which 
+is not a power of 2 -- interim hash values which do not have a sibling value
+to which they may be concatenated are promoted, unchanged, up the tree until 
+a sibling is found.
+
+<p>
+
+For example, consider a file made up of 5 segments, S1, S2, S3, S4, and S5.
+
+</p>
+</font><pre>
+                       ROOT=IH(H+E)
+                        /        \
+                       /          \
+                H=IH(F+G)          E
+                /       \           \
+               /         \           \
+        F=IH(A+B)       G=IH(C+D)     E
+        /     \           /     \      \
+       /       \         /       \      \
+  A=LH(S1)  B=LH(S2) C=LH(S3)  D=LH(S4) E=LH(S5)
+
+</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+
+<p>
+
+In the above example, E does not have any immediate siblings with which 
+to be combined to calculate the next generation. So, E is promoted up 
+the tree, without being rehashed, until it can be paired with value H. 
+The values H and E are then concatenated, and hashed, to produce the 
+ROOT hash. 
+
+</p>
+
+</p>
+
+<a name="rfc.section.2.3"></a><h4><a name="choice_of_segment_size">2.3</a>&nbsp;Choice Of Segment Size</h4>
+
+<p>
+ Any segment size is possible, but the choice of base segment 
+size establishes the smallest possible unit of verification. 
+</p>
+
+<p>
+If the the segment size is equal to or larger than the file to be hashed, the 
+tree hash value is the value of the single segment's value, which is 
+the same as the underlying hash algorithm value for the whole file.
+</p>
+
+<p>
+A segment size equal to the digest algorithm output size would 
+more than double the total amount of data to be hashed, and thus more 
+than double the time required to calculate the tree hash structure, as
+compared to a simple full-file hash. However, once the segment size 
+reaches several multiples of the digest size, calculating the tree 
+adds only a small fractional time overhead beyond what a traditional 
+full-file hash would cost.
+
+</p>
+
+<p>
+Otherwise, smaller segments are better. Smaller segments allow, but 
+do not require, the retention and use of fine-grained verification info, 
+(A stack-based tree calculation procedure need never retain more
+than one pending internal node value per generation before it can be
+combined with a sibling, and all interim values below a certain
+generation size of interest can be discarded.) Further, it is
+beneficial for multiple application domains and even files of wildly 
+different sizes to share the same base segment size, so that tree
+structures can be shared and used to discover correlated subranges.
+
+</p>
+
+<p>
+Thus the authors recommend a segment size of 1,024 bytes for most
+applications, as a sort of "smallest common denominator", even for
+applications involving multi-gigabyte or terabyte files. This segment 
+size is 40-50 times larger than common secure hash digest lengths 
+(20-24 bytes), and thus adds no more than 5-10% in running time as 
+compared to the "infinite segment" size case -- the traditional 
+full-file hash. 
+
+</p>
+
+<p>
+Considering a 1 terabyte file, the maximum dynamic 
+state required during the calculation of the tree root value is
+29 interim node values -- less than 1KB assuming a 20-byte digest
+algorithm like SHA-1.  Only interim values in generations of 
+interest for range verification need to be remembered for tree
+exchange, so if only 8GB ranges ever need to be verified, all 
+but the top 8 generations of internal values (255 hashes) can
+be discarded.
+
+</p>
+
+<a name="anchor5"><br><hr size="1" shade="0"></a>
+<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;Serialization Format</h3>
+
+<p>
+
+This section presents a serialization format for Merkle Hash Trees that utilizes the Direct Internet Message Encapsulation (DIME) format.  DIME is a generic message format that allows for multiple payloads, either text or binary.  The Merkle Hash Tree serialization format consists of two different payloads.  The first is XML encoded meta-data about the hash tree, and the second is binary serialization of the tree itself.  The binary serialization is required for two important reasons:
+
+<ol class="text">
+
+<li>
+
+Compactness of Representation - A key virtue of the hash tree approach is that it provides considerable integrity checking power with a relatively small amount of data.  A typical hash tree consists of a large number of small hashes.  Thus a text encoding, such as XML, could easily double the storage and transmission requirements of the hash tree, negating one of its key benefits.
+
+</li>
+
+<li>
+
+Random Access - In order to take full advantage of the hash tree construct, it is often necessary to read the elements of the hash tree in a random access fashion.  A common usage of this serialization format will be to access hash data over the HTTP protocol using "Range Requests".  This will allow implementors to retrieve small bits of hash information on-demand, even requesting different parts of the tree from different hosts on the network.
+
+</li>
+
+</ol>
+<p>
+
+</p>
+
+<a name="rfc.section.3.1"></a><h4><a name="anchor6">3.1</a>&nbsp;DIME Encapsulation</h4>
+
+<p>
+
+It is RECOMMENDED that DIME be used to encapsulate the payloads described in this specification.  The current version of DIME is "draft-nielsen-dime-01" at (http://gotdotnet.com/team/xml_wsspecs/dime/default.aspx).
+
+</p>
+
+<p>
+
+It is RECOMMENDED that the first payload in the DIME Message be the XML 
+Tree Description.  The XML Tree description payload MUST be before the the 
+binary serialized tree.
+
+</p>
+
+<p>
+
+It is RECOMMENDED that the binary serialized tree be stored in a single 
+payload rather than using chunked payloads.  This will allow implementations
+to read the tree hash data in a random access fashion within the payload.
+
+</p>
+
+<a name="rfc.section.3.2"></a><h4><a name="anchor7">3.2</a>&nbsp;XML Tree Description</h4>
+
+<p>
+
+The XML Tree Description contains metadata about the hash tree and file that is
+necessary to interpret the binary serialized tree.  An important consideration in the design of THEX is the intention for it to be received from untrusted sources within a distributed network.  The only information that needs to be obtained from a trusted source is the root hash and the segment size.  The root hash by itself can be used to verify the integrity of the serialized tree and of the file itself.
+
+</p>
+
+<p>
+
+It is RECOMMENDED that implementers assume that the serialized file was obtained from an untrusted source, thus the use of this format to store non-verifiable information, such as general file metadata, is highly discouraged. For instance, a malicious party could easily forge metadata, such as the author or file name.
+
+</p>
+
+<p>
+</font><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;!DOCTYPE hashtree system "http://open-content.net/spec/thex/thex.dtd">
+&lt;hashtree>
+    &lt;file size='1146045066' segmentsize='1024'/>
+    &lt;digest algorithm='http://www.w3.org/2000/09/xmldsig#sha1' 
+            outputsize='20'/>
+    &lt;serializedtree depth='22' 
+                    type='http://open-content.net/spec/thex/breadthfirst' 
+                    uri='uuid:09233523-345b-4351-b623-5dsf35sgs5d6'/>
+&lt;/hashtree>
+</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+
+</p>
+
+<a name="rfc.section.3.2.1"></a><h4><a name="anchor8">3.2.1</a>&nbsp;File Size</h4>
+
+<p>
+
+The file size attribute refers to the size, in bytes, of the file that the 
+hash tree was generated from.
+
+</p>
+
+<a name="rfc.section.3.2.2"></a><h4><a name="anchor9">3.2.2</a>&nbsp;File Segment Size</h4>
+
+<p>
+
+The file segment size identifies the size, in bytes, of the file segments that were used to create the hash tree.  As noted in <a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#choice_of_segment_size">Choice Of Segment Size</a>, it is recommended that applications use a small, common segment size such as 1,024 bytes in order to retain maximum flexibility and interoperability.  
+
+</p>
+
+<a name="rfc.section.3.2.3"></a><h4><a name="anchor10">3.2.3</a>&nbsp;Digest Algorithm</h4>
+
+<p>
+
+This attribute provides the identifier URI for the digest algorithm.  A URI is used here as an identifier instead of a regular string to avoid the overhead of IANA-style registration.  By using URIs, new types can be created without having to consult any other entity.  The URIs are only to be used for type identification purposes, but it is RECOMMENDED that the URIs point to information about the given digest function.  This convention is inspired by RFC 3275, the XML Signature Specification. 
+For instance, the SHA-1 algorithm is identified by "http://www.w3.org/2000/09/xmldsig#sha1".  All digest algorithms defined in RFC 3275 are supported.  The Tiger algorithm is also supported and is identified by "http://open-content.net/spec/digest/tiger".
+
+</p>
+
+<a name="rfc.section.3.2.4"></a><h4><a name="anchor11">3.2.4</a>&nbsp;Digest Output Size</h4>
+
+<p>
+
+This attribute specifies the size of the output of the hash function, in bytes.
+
+</p>
+
+<a name="rfc.section.3.2.5"></a><h4><a name="anchor12">3.2.5</a>&nbsp;Serialized Tree Depth</h4>
+
+<p>
+
+This attribute specifies the number of levels of the tree that have been serialized.  This value allows control over the amount of storage space required by the serialized tree.  In general, each row added to the tree will double the storage requirements while also doubling the verification resolution.
+
+</p>
+
+<a name="rfc.section.3.2.6"></a><h4><a name="anchor13">3.2.6</a>&nbsp;Serialized Tree Type</h4>
+
+<p>
+
+This attribute provides the identifier URI for the serialization type.  Just as with the Digest Algorithm, new serialization types can be added and described without going through a formal IANA-style process.  One serialization type is defined for "Breadth-First Serialization" later in this document.
+
+</p>
+
+<a name="rfc.section.3.2.7"></a><h4><a name="anchor14">3.2.7</a>&nbsp;Serialized Tree URI</h4>
+
+<p>
+
+This attribute provides the URI of the binary serialized tree payload.  If used within a DIME payload, it is recommended that this URI be location independant, such as the "uuid:" URI's used in the SOAP in DIME specification or SHA-1 URNs.
+
+</p>
+
+<a name="rfc.section.3.3"></a><h4><a name="anchor15">3.3</a>&nbsp;Breadth-First Serialization</h4>
+
+<p>
+
+Normal breadth-first serialization is the recommended manner in which to serialize the hash tree.  This format includes the root hash first, and then each "row" of hashes is serialized until the tree has been serialized to the lowest level as specified by the "Serialized Tree Depth" field.
+
+<p>
+
+For example, consider a file made up of 5 segments, S1, S2, S3, S4, and S5.
+
+</p>
+</font><pre>
+                       ROOT=IH(H+E)
+                        /        \
+                       /          \
+                H=IH(F+G)          E
+                /       \           \
+               /         \           \
+        F=IH(A+B)       G=IH(C+D)     E
+        /     \           /     \      \
+       /       \         /       \      \
+  A=LH(S1)  B=LH(S2) C=LH(S3)  D=LH(S4) E=LH(S5)
+</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+
+<p>
+
+The hashes would be serialized in the following order: ROOT, H, E, F, G, E, A, B, C, D, E.  Notice that E is serialized as a part of the each row. This is due to its promotion as there are no available siblings in the lower rows.  If we choose to serialize the entire tree, the serialized tree depth would be 4, and for a 20 byte digest output, the entire tree payload would occupy 11*20 = 220 bytes.
+
+</p>
+
+</p>
+
+<a name="rfc.section.3.3.1"></a><h4><a name="anchor16">3.3.1</a>&nbsp;Serialization Type URI</h4>
+
+<p>
+
+The serialization type URI for a Merkle Hash Tree serialized in normal breadth-first form is "http://open-content.net/spec/thex/breadthfirst".
+
+</p>
+
+<a name="rfc.authors"><br><hr size="1" shade="0"></a>
+<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<h3>Authors' Addresses</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Justin Chapweske</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Onion Networks, Inc.</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">1668 Rosehill Circle</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Lauderdale, MN  55108</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">US</td></tr>
+<tr><td class="author" align="right">EMail:&nbsp;</td>
+<td class="author-text"><a href="mailto:justin@onionnetworks.com">justin@onionnetworks.com</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="/web/20080316033726/http://onionnetworks.com/">http://onionnetworks.com/</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Gordon Mohr</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Bitzi, Inc.</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text"></td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text"></td></tr>
+<tr><td class="author" align="right">EMail:&nbsp;</td>
+<td class="author-text"><a href="mailto:gojomo@bitzi.com">gojomo@bitzi.com</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="/web/20080316033726/http://bitzi.com/">http://bitzi.com/</a></td></tr>
+</table>
+
+<a name="anchor17"><br><hr size="1" shade="0"></a>
+<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="rfc.section.A"></a><h3>Appendix A.&nbsp;Test Vectors</h3>
+
+<p>
+
+The following are test vectors for producing THEX hash trees using the Tiger hash algorithm.  The 'urn:sha1' entries specify the full file SHA-1 of the data, while the 'urn:tree:tiger' entries specify the root of the THEX hash tree of the data.
+</font><pre>
+The empty (zero-length) file:
+
+  urn:sha1:3I42H3S6NNFQ2MSVX7XZKYAYSCX5QBYJ
+  urn:tree:tiger:LWPNACQDBZRYXW3VHJVCJ64QBZNGHOHHHZWCLNQ
+  
+A file with a single zero byte:
+
+  urn:sha1:LOUTZHNQZ74T6UVVEHLUEDSD63W2E6CP
+  urn:tree:tiger:VK54ZIEEVTWNAUI5D5RDFIL37LX2IQNSTAXFKSA
+
+A file with 1024 'A' characters:
+
+  urn:sha1:ORWD6TJINRJR4BS6RL3W4CWAQ2EDDRVU
+  urn:tree:tiger:L66Q4YVNAFWVS23X2HJIRA5ZJ7WXR3F26RSASFA
+  
+A file with 1025 'A' characters:
+
+  urn:sha1:UUHHSQPHQXN5X6EMYK6CD7IJ7BHZTE77
+  urn:tree:tiger:PZMRYHGY6LTBEH63ZWAHDORHSYTLO4LEFUIKHWY
+</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+
+</p>
+</font></body></html>
+
+
+
+
+
+<!--
+     FILE ARCHIVED ON 3:37:26 mar 16, 2008 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 13:19:56 jan 19, 2014.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->

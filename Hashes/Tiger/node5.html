@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD>
+<TITLE> Summary</TITLE>
+</HEAD>
+<BODY>
+<meta name="description" value=" Summary">
+<meta name="keywords" value="tiger">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+ <BR> <HR><A NAME=tex2html60 HREF="node6.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html58 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html52 HREF="node4.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html61 HREF="node6.html">References</A>
+<B>Up:</B> <A NAME=tex2html59 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html53 HREF="node4.html"> Security</A>
+<BR> <HR> <P>
+<H1><A NAME=SECTION00050000000000000000> Summary</A></H1>
+<P>
+In this paper we have put forward a new hash function, called Tiger, which is
+designed to be both fast and secure. Its core is three rounds, each of which
+uses eight lookups into 8-to-64-bit S-boxes to provide a strong nonlinear
+avalanche plus a number of register operations to increase diffusion and make
+differential attacks harder.
+<P>
+It can be implemented efficiently on 32-bit and 64-bit machines. On the former
+it is as fast as SHA1, but unlike SHA1, it can use the full power of 64-bit
+machines, on which it is about 2.5 times faster than SHA1. It can also be
+implemented on 16-bit machines, on which it should still be faster than SHA1.
+<P>
+It outputs 192-bit hash values. For compatibility with existing hash functions,
+we suggest that its output can be truncated to 160 or 128 bits if required for
+compatibility with existing applications. We believe that even these shortened
+variants are more secure than existing functions of the same output length; 
+however if the ultra-cautious wish to add extra passes to Tiger, then they are 
+welcome to do so, and we suggest a multiplicative constant of 9 in all the 
+extra passes. We call these variants Tiger<b>M</b>, or Tiger<b>M</b>/<b>N</b>, where <b>M</b> is 
+the number of passes, and <b>N</b> is the number of bits in the hash value.
+<P>
+As usual when suggesting a new cryptographic primitive, we urge people to study
+the strength of Tiger; we will appreciate attacks, analysis and any
+other comments.
+More information on the current status of Tiger, an updated copy of
+this paper, and
+reference implementations, will be available at the authors' home
+pages at the URLs:
+<code>http://www.cs.technion.ac.il/~biham/</code> and
+<code>http://www.cl.cam.ac.uk/users/rja14/</code>.
+<P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Eli Biham <BR>
+Thu Feb  8 15:00:23 IST 1996</I>
+</ADDRESS>
+</BODY>

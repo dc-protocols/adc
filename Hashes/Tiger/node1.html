@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD>
+<TITLE> Motivation and Design Requirements</TITLE>
+</HEAD>
+<BODY>
+<meta name="description" value=" Motivation and Design Requirements">
+<meta name="keywords" value="tiger">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+ <BR> <HR><A NAME=tex2html20 HREF="node2.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html18 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html12 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html21 HREF="node2.html"> Our Proposal</A>
+<B>Up:</B> <A NAME=tex2html19 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html13 HREF="tiger.html">Tiger: A Fast New </A>
+<BR> <HR> <P>
+<H1><A NAME=SECTION00010000000000000000> Motivation and Design Requirements</A></H1>
+<P>
+Cryptographic hash functions are very important for cryptographic protocols.
+When used with signature schemes, their role is to reduce the amount of data
+which must be signed [Pre93] and to break up any properties such as
+multiplicative homomorphism which might be exploited by an opponent [And93]. In
+short, they need to be both efficient and secure; and in most commercial 
+applications, they need to run quickly in software on all the common hardware 
+platforms.
+<P>
+Some hash functions are based on feedforward modes of block ciphers [Pre93],
+but the main contenders have been the functions based on MD4 [Riv90], which
+include MD5 [Riv92], RIPE-MD [RACE95], SHA [NIST92] and SHA-1 [NIST95]. Another
+family was Snefru, and its derivative Snefru-8 [Mer90].
+<P>
+However, collisions for Snefru were found in 1990 [BS91] [BS93], and recently a
+collision of MD4 has also been found [Dob95]. These attacks cast doubt on the
+security of the other members of these families. One may only speculate at how
+long each function will remain unbroken; however it seems prudent to start work
+now on replacements.
+<P>
+From the performance point of view, all the functions mentioned above were
+designed for 32-bit processors. The next generation of processors has 64-bit
+words, and includes the DEC Alpha series as well as forthcoming processors from
+Intel, HP and IBM. It seems reasonable to assume that, with the exception of
+microcontrollers used in embedded applications, the majority of systems will
+use 64-bit processors within five years or so. However, on such processors, the
+above families of hash functions cannot be implemented efficiently.
+<P>
+For example, the MD family uses many 32-bit rotations and additions, so a
+64-bit register can only handle one 32-bit value at a time, which decreases the
+potential speed by a factor of about two. Moreover, the Alpha architecture does
+not have any rotation operations, whether 64-bit or 32-bit.
+<P>
+From these considerations, we believe that a next generation hash function:
+<P>
+<UL><LI> should be secure. At the very least it must be one-way, collision-free
+and multiplication-free;
+<P>
+<LI> should run quickly on 64-bit processors, and yet not run too slowly on
+the already fielded 32-bit machines such as Intel's 80486;
+<P>
+<LI> should, insofar as possible, be usable as a drop-in replacement for MD4, 
+MD5, SHA and SHA-1.
+</UL><BR> <HR><A NAME=tex2html20 HREF="node2.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html18 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html12 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html21 HREF="node2.html"> Our Proposal</A>
+<B>Up:</B> <A NAME=tex2html19 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html13 HREF="tiger.html">Tiger: A Fast New </A>
+<BR> <HR> <P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Eli Biham <BR>
+Thu Feb  8 15:00:23 IST 1996</I>
+</ADDRESS>
+</BODY>

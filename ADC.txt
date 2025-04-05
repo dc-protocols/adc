@@ -1,0 +1,978 @@
+= ADC Protocol
+version 1.0.4, UNRELEASED
+
+== Abstract
+ADC is a text protocol for a client-server network similar to Neo-Modus'
+Direct Connect (NMDC). The goal is to create a simple protocol that doesn't
+require much effort neither in hub nor client, and is yet extensible. It
+addresses some of the issues in the NMDC protocol, but not all.
+
+The same protocol structure is used both for client-hub and client-client
+communication. This document is split into two parts; the first shows the
+structure of the protocol, while the second implements a specific system using
+this structure. ADC stands for anything you would like it to stand for;
+Advanced Direct Connect is the first neutral thing that springs to mind =).
+
+Many ideas for the protocol come from Jan Vidar Krey's DCTNG draft. Major 
+contributors include Dustin Brody, Walter Doekes, Timmo Stange, Fredrik
+Ullner, Fredrik Stenberg and others. Jon Hess contributed the original Direct
+Connect idea through the Neo-Modus Direct Connect client / hub.
+
+== Version history
+The latest draft of the next version of this document as well as intermediate
+and older versions can be downloaded from
+$URL: file:///svn/p/adc/code/trunk/ADC.txt $. 
+This version corresponds to $Revision: 126 $.
+
+=== Version 1.0.4, UNRELEASED
+
+* Separators in the command description for GET, GFI and SND are now explicit.
+* Clarified UTF-8 encoding note.
+
+=== Version 1.0.3, 2013-06-30
+Fredrik Ullner <ullner@gmail.com>
+
+* Added examples for each command.
+* Features are now described in its own section.
+* Specified token use from server party in client-client connections.
+* Changed size in file list schema to an unsigned long to manage files larger than 2 GiB.
+
+=== Version 1.0.2, 2013-01-31
+Fredrik Ullner <ullner@gmail.com>
+
+* Editorial updates
+* Added a terminology section
+* Added note in STA, severity 2 (Fatal), on responsibility.
+* State management is now its own section.
+* The client in a client-client connection should send its INF first now.
+
+=== Version 1.0.1, 2008-05-02
+Jacek Sieka <arnetheduck@gmail.com>
+
+* Moved extensions to a separate document
+* Moved specification to a separate project on SourceForge
+
+=== Version 1.0, 2007-12-01
+Jacek Sieka <arnetheduck@gmail.com>
+
+* Initial release
+
+== Line protocol
+=== General
+* All messages begin with a four-letter word (FOURCC). The first letter designates how
+  the message should be sent and the other three specify what to do.
+* Parameters are separated by space and a newline (codepoint 0x0a) ends each
+  message. The string "\s" escapes space, "\n" newline and "\\" backslash.
+  This version of the protocol reserves all other escapes for future use; any
+  message containing unknown escapes must be discarded.
+* All text must be sent as 1-to-4 byte, RFC 3629-compliant UTF-8 encoded Unicode 
+  in normalization form C.
+* Clients must ignore unknown/badly formatted messages. Hubs must ignore
+  invalid messages and should dispatch unknown messages according to their
+  type.
+* Client addresses must be specified in dotted-decimal form ("x.x.x.x") for
+  IPv4 and RFC 4291 form for IPv6. Hub addresses must be specified in URL
+  form, with "adc" as protocol specifier ("adc://server:port/").
+* Numbers are sent as strings in standard floating point notation, using '.'
+  as the decimal separator and without a thousands separator. Integers are
+  numbers with neither a decimal portion nor an exponent. Applications should
+  be prepared to handle at least 64-bit signed integers and 64-bit floating
+  point numbers. A '-' prefix negates.
+* SIDs, PIDs, CIDs, and short binary data are sent as base32-encoded strings.
+  Long binary data transfers should use the file transfer mechanism with named
+  roots.
+* Extension names, protocol names, and other text not entered by the user may
+  only include viewable characters that can be encoded by one byte in the
+  UTF-8 encoding (Unicode codepoints 33-127). ADC is case-sensitive, requiring
+  upper case for command names.
+* Some commands and functionality require the use of a hash function.  The
+  hash function is negotiated during session setup and stays the same for the
+  duration of the session.
+
+=== Message syntax
+..................
+message               ::= message_body? eol
+message_body          ::= (b_message_header | cih_message_header | de_message_header | f_message_header | u_message_header) 
+                          (separator positional_parameter)* (separator named_parameter)*
+b_message_header      ::= 'B' command_name separator my_sid
+cih_message_header    ::= ('C' | 'I' | 'H') command_name
+de_message_header     ::= ('D' | 'E') command_name separator my_sid separator target_sid
+f_message_header      ::= 'F' command_name separator my_sid separator (('+'|'-') feature_name)+
+u_message_header      ::= 'U' command_name separator my_cid
+command_name          ::= simple_alpha simple_alphanum simple_alphanum
+positional_parameter  ::= parameter_value
+named_parameter       ::= parameter_name parameter_value?
+parameter_name        ::= simple_alpha simple_alphanum
+parameter_value       ::= escaped_letter+
+target_sid            ::= encoded_sid
+my_sid                ::= encoded_sid
+encoded_sid           ::= base32_character{4}
+my_cid                ::= encoded_cid
+encoded_cid           ::= base32_character+
+base32_character      ::= simple_alpha | [2-7]
+feature_name          ::= simple_alpha simple_alphanum{3}
+escaped_letter        ::= [^ \#x0a] | escape 's' | escape 'n' | escape escape
+escape                ::= '\'
+simple_alpha          ::= [A-Z]
+simple_alphanum       ::= [A-Z0-9]
+eol                   ::= #x0a
+separator             ::= ' '
+..................
+
+=== Message types
+Message type specifies how messages should be routed and thus which additional
+fields can be found in the message header. Clients should use the most
+limiting type, in terms of recipients, that makes sense for a particular
+message when sending it to the hub for distribution. Clients should use the
+message type only to aid in parsing the message and otherwise ignore it. The
+following message types are defined:
+
+[options="autowidth"]
+|=====
+|B |Broadcast |Hub must send message to all connected clients, including the sender of the message.
+|C |Client message |Clients must use this message type when communicating directly over TCP.
+|D |Direct message |The hub must send the message to the target_sid user.
+|E |Echo message |The hub must send the message to the target_sid user and the my_sid user.
+|F |Feature broadcast |The hub must send message to all clients that support both all required (+) and no excluded (-) features named. The feature name is matched against the corresponding SU field in INF sent by each client.
+|H |Hub message |Clients must use this message type when a message is intended for the hub only.
+|I |Info message |Hubs must use this message type when sending a message to a client that didn't come from another client.
+|U |UDP message |Clients must use this message type when communicating directly over UDP.
+|=====
+
+=== Session hash
+Certain commands require the use of a hash function. The hash function used is
+negotiated using the SUP mechanism each time a new connection is established.
+When a client first connects, it offers a set of hash functions as SUP
+features. The server picks one of the offered functions and communicates its
+choice to the client by placing it before any other hash features present in
+the first SUP from the server. Clients and hubs are required to support at
+least one hash function, used both for protocol purposes and file
+identification.
+
+=== Client identification
+Each client is identified by three different IDs, Session ID (SID), Private ID
+(PID), and Client ID (CID).
+
+==== Session ID
+Session IDs appear in all communication that interacts with the hub. They
+identify a unique user on a single hub and are assigned by the hub during
+initial protocol negotiation. SIDs are 20 bits long and encoded using a 4-byte
+base32 encoded string.
+
+==== Private ID
+Private IDs globally identify a unique client. They function during initial
+protocol negotiation to generate the CID and are invisible to other clients.
+PIDs should be generated in a way to avoid collisions, for example using the
+hash of the current time and primary network card MAC address if sufficient
+randomness cannot be generated. Hubs and clients may not disclose PIDs to
+other clients; doing so weakens the security of the ADC network. Clients
+should should keep the same PID between sessions and hubs. PID length follows
+the length of the hash algorithm used for the session.
+
+==== Client ID
+Client IDs globally and publicly identify a unique client and underlie client
+to client communication. They are generated by hashing the (unencoded) PID
+with the session hash algorithm. Hubs should register clients by CID.  CID
+length follows the length of the hash algorithm used for the session. Clients
+must be prepared to handle CIDs of varying lengths.
+
+== Files
+=== File names and structure
+Filenames are relative to a fictive root in the user's share. "/" separates
+directories; each file or directory name must be unique in a case-insensitive
+context. All printable characters, including whitespace, are valid names for
+files, the "/" and "\" being escaped by "\". Clients must then properly filter
+the filename for the target file system, as well as request filenames from
+other clients according to these rules. The special names "." and ".." may not
+occur as a directory or filename; any file list received containing those must
+be ignored. All directory names must end with a "/". 
+
+Shared files are identified relative to the unnamed root "/"
+("/dir/subdir/filename.ext"), while extensions can add named roots to this
+namespace. For example, "TTH/..." from the TIGR extension uses the named root
+"TTH" to identify files by their Tiger tree hash.  It is invalid for names
+from the unnamed root to appear in the share without also being identified by
+at least one hash value.
+
+The rootless filename "files.xml" specifies the full file listing,
+uncompressed, in XML using the UTF-8 encoding. It is recommended that clients
+use an extension to transfer this list in compressed form.
+
+Extensions may specify additional rootless filenames, but should generally
+avoid doing so to avoid name clashes.
+
+The special type "list" is used to browse partial lists. A partial file list
+has the same structure as a normal list, but directories may be tagged with an
+attribute 'Incomplete="1"' to specify that they have unexpanded sub-entries.
+Only directory names in the unnamed root may be requested, for instance "/"
+and "/share/". The content of that directory will then be sent to the
+requesting client to a depth chosen by the sending client (it should normally
+only send the directory level requested, but may choose to send more if there
+are few entries, for example a directory only containing a few files). The
+"Base" attribute of "FileListing" specifies which directory a particular file
+list represents.
+
+=== File list
+files.xml is the list of files intended for browsing. The file list must
+validate against the following XML schema:
+
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="base32Binary">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Za-z2-7]+"></xs:pattern>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="zeroOne">
+    <xs:restriction base="xs:int">
+      <xs:enumeration value="0"></xs:enumeration>
+      <xs:enumeration value="1"></xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="ContainerType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:choice>
+        <xs:element ref="Directory"></xs:element>
+        <xs:element ref="File"></xs:element>
+        <xs:any processContents="lax"></xs:any>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:attribute name="Base" type="xs:string"></xs:attribute>
+  <xs:attribute name="CID" type="base32Binary"></xs:attribute>
+  <xs:attribute name="Generator" type="xs:string"></xs:attribute>
+  <xs:attribute name="Incomplete" type="zeroOne" default="0"></xs:attribute>
+  <xs:attribute name="Name" type="xs:string"></xs:attribute>
+  <xs:attribute name="Size" type="xs:unsignedLong"></xs:attribute>
+  <xs:attribute name="Version" type="xs:int"></xs:attribute>
+
+  <xs:element name="FileListing">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="ContainerType">
+          <xs:attribute ref="CID" use="required"></xs:attribute>
+          <xs:attribute ref="Version" use="required"></xs:attribute>
+          <xs:attribute ref="Generator" use="optional"></xs:attribute>
+          <xs:attribute ref="Base" use="required"></xs:attribute>
+          <xs:anyAttribute processContents="lax"></xs:anyAttribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Directory">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="ContainerType">
+          <xs:attribute ref="Name" use="required"></xs:attribute>
+          <xs:attribute ref="Incomplete" use="optional"></xs:attribute>
+          <xs:anyAttribute processContents="lax"></xs:anyAttribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="File">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:any minOccurs="0" maxOccurs="unbounded"></xs:any>
+      </xs:sequence>
+      <xs:attribute ref="Name" use="required"></xs:attribute>
+      <xs:attribute ref="Size" use="required"></xs:attribute>
+      <xs:anyAttribute processContents="lax"></xs:anyAttribute>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
+----
+
+An example file list:
+
+----
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<FileListing Version="1" CID="mycid" Generator="DC++ 0.701" Base="/">
+  <Directory Name="share">
+    <Directory Name="DC++ Prerelease">
+      <File Name="DCPlusPlus.pdb" Size="17648640" TTH="xxx" />
+      <File Name="DCPlusPlus.exe" Size="946176" TTH="yyy" />
+    </Directory>
+    <File Name="ADC.txt" Size="154112" TTH="zzz" />
+  </Directory>
+  <!-- Only used by partial lists -->
+  <Directory Name="share2" Incomplete="1"/>
+</FileListing>
+----
+
+"encoding" must always be set to UTF-8. Clients must be prepared to handle XML
+files both with and without a BOM (byte order mark), although should not
+output one.
+
+"Version" will not change unless a breaking change is done to the structure of
+the file.
+
+"CID" is the CID of the client that generated the list.
+
+"Generator" is optional and for informative purposes only.
+
+"Base" is used for partial file lists, but must be present even in the
+non-partial list.
+
+"Incomplete" signals whether a directory in a partial file list contains
+unlisted items. "1" means the directory contains unlisted items, "0" that it
+does not. Incomplete="0" is the default and may thus be omitted.
+
+"TTH" is used by the TIGR extension.
+
+More information may be added to the file by extensions, but is not guaranteed
+to be interpreted by other clients.
+
+== BASE messages
+ADC clients/hubs that support the following messages must advertise the feature "BASE" .
+
+The connecting party will be known as client, the other as server. For each message, the action code and the
+message contexts under which it is valid are specified. 
+
+The message context specifies how the message may be received / sent. Hubs and
+clients may support using the message in additional contexts as well. The
+context codes are as follows:
+
+[options="autowidth"]
+|=====
+|F |From hub (hub-client TCP)
+|T |To hub (hub-client TCP)
+|C |Between clients (client-client TCP)
+|U |Between clients (client-client UDP)
+|=====
+
+When requesting a new client-client connection, this protocol is identified by
+"ADC/1.0".
+
+In the descriptions of the commands, the message header and trailing named
+parameters have been omitted.
+
+=== State management
+
+ADC defines a state machine to control flow and processing of messages. The receiving end must ensure, according to the state machine, that it does not parse or drop messages while it is in the process of another state where the message might be invalid.
+
+[options="autowidth, header"]
+|=====
+|State |Description
+|PROTOCOL |Feature support recovery
+|IDENTIFY |User identification and static checks
+|VERIFY |Password check (does not exist in C-C communication unless announced by an extension)
+|NORMAL |Normal operation (end state)
+|DATA |Binary transfers. The state changes back to NORMAL once the transfer is complete.
+|=====
+
+The states presented are the login order, from top to bottom.
+
+==== States
+===== PROTOCOL
+When the hub receives a SUP, it should reply with its own SUP followed by SID assignment. The hub transitions the state then to IDENTIFY. 
+
+When the server party receives a SUP in the client-client connection, it should reply with its own SUP. The server transitions the state then to IDENTIFY.
+
+===== IDENTIFY
+The hub may initiate this state by sending its own INF in this state but is not required. The client should send its INF whereupon the hub shall verify the PD and ID fields and other required fields. The hub transitions the state then to VERIFY if the user is registered or NORMAL if not.
+
+The client party in the client-client connection shall send its INF whereupon the server party shall send its INF. The server transitions the state then to NORMAL (or VERIFY if an extension implements this).
+
+===== VERIFY
+The hub shall send a GPA whereupon the client will respond with a PAS. The server transitions the state then to NORMAL.
+
+Client-client support for VERIFY must be signaled as an extension.
+
+===== NORMAL
+The hub should send its INF if not done already. The server shall send the INF of all connected clients whereupon the connecting client's INF shall be last. Normal operation may then commence with chatting and file sharing.
+
+Normal operation may commence immediately in a client-client connection. Typically, the downloading party sends a GET whereupon the other party sends a SND followed by a transition to the DATA state.
+
+===== DATA
+The DATA state is an actual binary transfer state, it does not have any commands or other content beyond streaming data.
+
+The DATA state exist only in the client-client communication, an extension can be used to add binary transfers between a client and a hub. The DATA state commence after a SND command.
+
+The state transitions back to NORMAL once the correct amount of bytes are transferred (specified by a previous command).
+
+==== Notes
+State always transitions from PROTOCOL to IDENTIFY and never from IDENTIFY to PROTOCOL. Likewise apply between IDENTIFY, VERIFY and NORMAL. This does not apply between NORMAL and DATA.
+
+Successful commands sent after a state transition indicate that the next state has been reached. For example, PROTOCOL begins a connection and state changes to IDENTIFY once the hub sends the SID.
+
+The state is shared between the client and the server while the server (implicitly) controls state transitions.
+
+The connecting party is known as the client and the other is known as the server (or hub). The client initiates the connection and state machine by sending its own SUP.
+
+A STA is valid in all states (except DATA) and may require that messages are resent (i.e. that the state transition does not occur).
+
+It is always the client party in a client-client connection that sent the connection request (CTM/RCM) command that is given control of the connection once the NORMAL state has been reached.
+
+Any party may disconnect the connection if they receive invalid data or insufficient data. All implementations must therefore be prepared for a potential disconnection following each command, meaning that the following state is not achieved. A disconnection should be preceded by a STA or a QUI to indicate what was wrong.
+
+The hub's INF is optionally sent in IDENTIFY or in NORMAL.
+
+[options="autowidth, header"]
+|=====
+|State |Commands
+|PROTOCOL |STA, SUP, SID
+|IDENTIFY |STA, INF, QUI
+|VERIFY |STA, GPA, PAS, QUI
+|NORMAL |STA, SUP, INF, MSG, SCH, RES, CTM, RCM, QUI, GET, GFI, SND
+|=====
+
+=== Features
+Features are used to indicate support for protocol commands or functionality. 
+
+The server may use any feature that the client indicates support for regardless of its own SUP and vice versa. A client can announce features in the SUP regardless of the INF's SU field and vice versa.
+
+A feature name consists of four uppercase letters, where the last letter may be changed to a number to indicate a revised version of the feature.
+
+A central register of known features is kept to avoid clashes, see below features in this protocol and the features in the extension document.
+
+==== BASE
+All clients must support the BASE feature (unless a future revision takes its place), which is this protocol.
+
+Clients must add the feature to the INF's SU field.
+
+==== TCP4 / TCP6
+The features TCP4 and TCP6 are used to indicate support for incoming TCP connections. The 4 and 6 indicate IPv4 and IPv6.
+
+Clients should add the feature to the INF's SU field.
+
+Clients that support incoming TCP connections is referenced as 'active' where the opposite is 'passive'.
+
+==== UDP4 / UDP6
+The features UDP4 and UDP6 are used to indicate support for incoming UDP packets. The 4 and 6 indicate UDP with IPv4 and IPv6.
+
+Clients should add the feature to the INF's SU field.
+
+Clients that support incoming UDP packets is referenced as 'active' where the opposite is 'passive'.
+
+=== Actions
+==== STA
+ STA code description
+
+Contexts: F, T, C, U
+
+States: PROTOCOL, IDENTIFY, VERIFY, NORMAL
+
+Status code in the form "xyy" where x specifies severity and yy the specific
+error code. The severity and error code are treated separately, the same error
+could occur at different severity levels.
+
+Severity values:
+
+[options="autowidth"]
+|=====
+|0 |Success (used for confirming commands), error code must be "00", and an additional flag "FC" contains the FOURCC of the command being confirmed if applicable.
+|1 |Recoverable (error but no disconnect)
+|2 |Fatal (disconnect), sending party is responsible for action.
+|=====
+
+Error codes:
+
+[options="autowidth"]
+|=====
+|00 |Generic, show description
+|x0 |Same as 00, but categorized according to the rough structure set below
+|10 |Generic hub error
+|11 |Hub full
+|12 |Hub disabled
+|20 |Generic login/access error
+|21 |Nick invalid
+|22 |Nick taken
+|23 |Invalid password 
+|24 |CID taken
+|25 |Access denied, flag "FC" is the FOURCC of the offending command. Sent when a user is not allowed to execute a particular command
+|26 |Registered users only
+|27 |Invalid PID supplied
+|30 |Kicks/bans/disconnects generic
+|31 |Permanently banned
+|32 |Temporarily banned, flag "TL" is an integer specifying the number of seconds left until it expires (This is used for kick as well…).
+|40 |Protocol error
+|41 |Transfer protocol unsupported, flag "TO" the token, flag "PR" the protocol string. The client receiving a CTM or RCM should send this if it doesn't support the C-C protocol.
+|42 |Direct connection failed, flag "TO" the token, flag "PR" the protocol string. The client receiving a CTM or RCM should send this if it tried but couldn't connect.
+|43 |Required INF field missing/bad, flag "FM" specifies missing field, "FB" specifies invalid field.
+|44 |Invalid state, flag "FC" the FOURCC of the offending command.
+|45 |Required feature missing, flag "FC" specifies the FOURCC of the missing feature. 
+|46 |Invalid IP supplied in INF, flag "I4" or "I6" specifies the correct IP.
+|47 |No hash support overlap in SUP between client and hub.
+|50 |Client-client / file transfer error
+|51 |File not available
+|52 |File part not available
+|53 |Slots full
+|54 |No hash support overlap in SUP between clients.
+|=====
+
+Description:
+Description of the error, suitable for viewing directly by the user
+
+Even if an error code is unknown by the client, it should display the text
+message alone. Error codes are used so that the client can take different
+action on different errors. Most error codes don't have parameters and only
+make sense in C and I types.
+
+==== SUP
+ SUP ('AD' | 'RM') feature (separator ('AD' | 'RM') feature)*
+
+Contexts: F, T, C
+
+States: PROTOCOL, NORMAL
+
+This command identifies which features a specific client / hub supports.
+
+This command can also be used to dynamically add / remove features, 'AD'
+meaning add and 'RM' meaning remove. 
+
+==== SID
+ SID sid
+
+Contexts: F
+
+States: PROTOCOL
+
+This command assigns a SID to a user who is currently logging on.
+
+==== INF
+ INF
+
+Contexts: F, T, C
+
+States: IDENTIFY, NORMAL
+
+This command updates the information about a client. Each time this is
+received, it means that the fields specified have been added or updated. Each
+field is identified by two characters, directly followed by the data
+associated with that field. A field, and the effects of its presence, can be
+canceled by sending the field name without data. Clients must ignore fields
+they don't recognize. Most of these fields are only interesting in the
+client-hub communication; during client-client this command is mainly used for
+identification purposes. Hubs can choose to require or ignore any or all of
+these fields; clients must work without any of them. Many of these fields,
+such as share size and client version, are purely informative, and should be
+taken with a grain of salt, as it is very easy to fake them. However, clients
+should strive to provide accurate data for the general health of the system,
+as providing invalid information probably will annoy a great deal of people.
+Updates are made in an incremental manner, by sending only the fields that
+have changed.
+
+Fields:
+
+[options="autowidth,header"]
+|=====
+|Code |Type    |Description
+|ID |base32 |The CID of the client. Mandatory for C-C connections.
+|PD |base32 |The PID of the client. Hubs must check that the hash(PID) == CID and then discard the field before broadcasting it to other clients. Must not be sent in C-C connections.
+|I4 |IPv4 |IPv4 address without port. A zero address (0.0.0.0) means that the server should replace it with the real IP of the client. Hubs must check that a specified address corresponds to what the client is connecting from to avoid DoS attacks and only allow trusted clients to specify a different address. Clients should use the zero address when connecting, but may opt not to do so at the user's discretion.
+|I6 |IPv6 |IPv6 address without port. A zero address (::) means that the server should replace it with the IP of the client. 
+|U4 |integer |Client UDP port.
+|U6 |integer |Same as U4, but for IPv6.
+|SS |integer |Share size in bytes
+|SF |integer |Number of shared files
+|VE |string |Client identification, version (client-specific, a short identifier then a dotted version number is recommended)
+|US |integer |Maximum upload speed, bytes/second
+|DS |integer |Maximum download speed, bytes/second
+|SL |integer |Maximum simultaneous upload connections (slots)
+|AS |integer |Automatic slot allocator speed limit, bytes/sec. The client keeps opening slots as long as its total upload speed doesn't exceed this value.
+|AM |integer |Minimum simultaneous upload connections in automatic slot manager mode
+|EM |string |E-mail address
+|NI |string |Nickname (or hub name). The hub must ensure that this is unique in the hub up to case-sensitivity. Valid are all characters in the Unicode character set with code point above 32, although hubs may limit this further as they like with an appropriate error message.
+|DE |string |Description. Valid are all characters in the Unicode character set with code point equal to or greater than 32.
+|HN |integer |Hubs where user is a normal user and in NORMAL state
+|HR |integer |Hubs where user is registered (had to supply password) and in NORMAL state
+|HO |integer |Hubs where user is op and in NORMAL state
+|TO |string |Token, as received in RCM/CTM, when establishing a C-C connection.
+|CT |integer |Client (user) type, 1=bot, 2=registered user, 4=operator, 8=super user, 16=hub owner, 32=hub (used when the hub sends an INF about itself). Multiple types are specified by adding the numbers together.
+|AW |integer |1=Away, 2=Extended away, not interested in hub chat (hubs may skip sending broadcast type MSG commands to clients with this flag)
+|SU |string |Comma-separated list of feature FOURCC's. This notifies other clients of extended capabilities of the connecting client.
+|RF |string |URL of referrer (hub in case of redirect, web page)
+|=====
+
+NOTE: Normally one would only accept an IP (I4 or I6) that is the same as the
+source IP of the connecting peer. Use caution when accepting unknown IPs. Only
+for trusted users one may allow a different IP or an IP from a different
+domain (IPv4 or IPv6) to be specified. If you fail to do this, your hub can be
+used as a medium for DDoS attacks.
+
+When the hub sends an INF about itself, the NI becomes hub
+name, the VE the hub version, and DE the hub description.
+
+==== MSG
+ MSG text
+
+Contexts: F, T
+
+States: NORMAL
+
+A chat message. The receiving clients should precede it with "<" nick ">", to
+allow for uniform message displays.
+
+Flags:
+
+[options="autowidth"]
+|=====
+|PM<group-SID> |Private message, <group-SID> is the SID clients must send responses to. This field must contain the originating SID if this is a normal private conversation.
+|ME |Speak in third person, 1 = message should be displayed as /me in IRC ("*nick text")
+|=====
+
+==== SCH
+ SCH
+
+Contexts: F, T, C, (U)
+
+States: NORMAL
+
+Search. Each parameter is an operator followed by a term. Each term is a
+two-letter code followed by the data to search for. Clients must ignore any
+unknown fields and complete the search request as if they were not present,
+unless no known fields are present in which case the client must ignore the
+search.
+
+[options="autowidth"]
+|=====
+|AN, NO, EX |String search term, where AN is include (and), NO is exclude (and not), and EX is extension. Each filename (including the path to it) should be matched using case insensitive substring search as follows: match all AN, remove those that match any NO, and make sure the extension matches at least one of the EX (if it is present). Extensions must be sent without the leading period (\'.').
+|LE |Smaller (less) than or equal size in bytes
+|GE |Larger (greater) than or equal size in bytes
+|EQ |Exact size in bytes
+|TO |Token, string. Used by the client to tell one search from the other. If present, the responding client must copy this field to each search result.
+|TY |File type, to be chosen from the following (none specified = any type): 1 = File, 2 = Directory
+|=====
+
+Searching by UDP is subject to IP spoofing; can thus be used to initiate a DoS
+attack. Clients should only accept incoming UDP searches in a trusted
+environment.
+
+==== RES
+ RES
+
+Contexts: F, T, C, U
+
+States: NORMAL
+
+Search result, made up of fields syntactically and structurally similar to the
+INF ones. Clients must provide filename, session hash, size and token, but are
+encouraged to supply additional fields if available. Passive results should be
+limited to 5 and active to 10.
+
+[options="autowidth"]
+|=====
+|FN |Full filename including path in share
+|SI |Size, in bytes
+|SL |Slots currently available
+|TO |Token
+|=====
+
+==== CTM
+ CTM protocol separator port separator token 
+
+Contexts: F, T
+
+States: NORMAL
+
+Connect to me. Used by active clients that want to connect to someone, or in
+response to RCM. Only TCP active clients may send this. <token> is a string
+that identifies the incoming connection triggered by this command and must be
+present in the INF command of the connecting client. Implementations should not accept
+incoming connections with a token that was not sent earlier. The server party may, but should not, provide the token in its INF. 
+<protocol> is an arbitrary string specifying the protocol to connect with; in the case of an
+ADC 1.0 compliant connection attempt, this should be the string "ADC/1.0". If
+<protocol> is supported, a response to RCM must copy the <token> and
+<protocol> fields directly. If a protocol is not supported, a DSTA must be
+sent indicating this.
+
+==== RCM
+ RCM protocol separator token
+
+Contexts: F, T
+
+States: NORMAL
+
+Reverse CTM. Used by passive clients to request a connection token from an
+active client.
+
+==== GPA
+ GPA data
+
+Contexts: F
+
+States: VERIFY
+
+Get Password. The data parameter is at least 24 random bytes (base32 encoded).
+
+==== PAS
+ PAS password
+
+Contexts: T
+
+States: VERIFY
+
+Password. The password (utf-8 encoded bytes), followed by the random data
+(binary), passed through the session hash algorithm then converted to base32.
+
+==== QUI
+ QUI sid
+
+Contexts: F
+
+States: IDENTIFY, VERIFY, NORMAL
+
+The client identified by <sid> disconnected from the hub. If the SID belongs
+to the client receiving the QUI, it means that it should take action according
+to the reason (i.e. redirect or not reconnect in case of ban). The hub must
+not send data after the QUI to the client being disconnected.
+
+The following flags may be present:
+
+[options="autowidth"]
+|=====
+|ID |SID of the initiator of the disconnect (for example the one that issued a kick).
+|TL |Time Left until reconnect is allowed, in seconds. -1 = forever. 
+|MS |Message.
+|RD |Redirect server URL.
+|DI |Any client that has this flag in the QUI message should have its transfers terminated by other clients connected to it, as it is unwanted in the system.
+|=====
+
+==== GET
+ GET type separator identifier separator start_pos separator bytes
+
+Contexts: C
+
+States: NORMAL
+
+Requests that a certain file or binary data be transmitted. <start_pos> counts
+0 as the first byte. <bytes> may be set to -1 to indicate that the sending
+client should fill it in with the number of bytes needed to complete the file
+from <start_pos>. <type> is a [a-zA-Z0-9]+ string that specifies the namespace
+for identifier and BASE requires that clients recognize the types "file" and
+"list". Extensions may add to the identifier names as well as add new types.
+
+"file" transfers transfer the file data in binary, starting at <start_pos> and
+sending <bytes> bytes. Identifier must come from the namespace of the current
+session hash.
+
+"list" transfers are used for partial file lists and have a directory as
+identifier. <start_pos> is always 0 and <bytes> contains the uncompressed
+length of the generated XML text in the corresponding SND. An optional flag
+"RE1" means that the client is requesting a recursive list and that the
+sending client should send the directory itself and all subdirectories as
+well. If this is too much, the sending client may choose to send only parts.
+The flag should be taken as a hint that the requesting client will be getting
+the subdirectories as well, so they might as well be sent in one go.
+Identifier must be a directory in the unnamed root, ending (and beginning)
+with "/".
+
+Note that GET can also be used by extensions for binary transfers between hub
+and client.
+
+==== GFI
+ GFI type separator identifier
+
+Contexts: C
+
+States: NORMAL
+
+Get File Information. Requests that the other client returns a RES about the
+file as if it had responded to a SCH command. Type and identifier are the same
+as for GET, but the identifier may come from any namespace, including the
+unnamed root.
+
+==== SND
+ SND type separator identifier separator start_pos separator bytes
+
+Contexts: C
+
+States: NORMAL
+
+The sender will transmit until <bytes> bytes of binary data have been sent. The
+parameters correspond to the GET parameters except that if <bytes> equals -1
+it must be replaced by the number of bytes needed to complete the file
+starting at <start_pos>.
+
+== Examples
+Note that examples listed here omit the trailing newline character that shall always end a message.
+
+=== Client – Hub connection
+
+[options="autowidth,header"]
+|=====
+|Client |Hub
+|HSUP ADBASE ADTIGR ...|
+| |ISUP ADBASE ADTIGR ...
+| |ISID <client-sid>
+| |IINF CT32 ...
+|BINF <my-sid> ID... PD... |
+| |IGPA ...
+|HPAS ... |
+| |BINF <all clients>
+| |BINF <Client-SID>
+|... |...
+|=====
+
+=== Client – Client connection
+
+[options="autowidth,header"]
+|=====
+|Client |Server
+|CSUP ADBASE ADTIGR ... |
+| |CSUP ADBASE ADTIGR ...
+|CINF IDxxx TO<token> |
+| |CINF IDxxx
+| |CGET ...
+|CSND ... |
+|<data> |
+|=====
+
+=== Commands
+
+==== STA
+[options="header"]
+|=====
+|Example |Description
+|ISTA 211 Hub\sfull |A STA sent from a hub with the severity Fatal (2) and the error code Hub full (11). The descriptive text afterward is to preferably be presented to the user.
+|CSTA 151 File\snot\savailable |A STA is sent in a client to client connection, indicating that the request for a file failed (error code 51), as the file was not vailable. The severity (Recoverable, 1) indicates that an error occured but that the connection will remain.
+|ESTA BBBB CCCC 142 Transfer\sprotocol\sunsupported TO123456789 PRADC/0.5 |A STA is sent from one client to another client in a hub, routed as a E-type message (meaning that the sender should receive it as well), as a response for not supporting transfers of the 'protocol' kind. The token '123456789' is used and the protocol is "ADC/0.5" (see the command CTM for the version that shall be used in this protocol version).
+|=====
+
+==== SUP
+[options="header"]
+|=====
+|Example |Description
+|ISUP ADBASE ADTIGR ADBLOM |A SUP sent from a hub indicating that the hub has added the features BASE, TIGR and BLOM.
+|HSUP RMBLOM ADZLIF |A SUP sent from a client to the hub indicating that the client has added the fature ZLIF and removed the feature BLOM.
+|=====
+
+==== SID
+[options="header"]
+|=====
+|Example |Description
+|ISID BBBB |An SID is sent from the hub indicating that the client's SID from then on shall be BBBB.
+|=====
+
+==== INF
+[options="header"]
+|=====
+|Example |Description
+|IINF CT32 NIexample_hub DEThe\s\simple\shub |An INF is sent from the hub containing its own information: the name is "example_hub" and description "The simple hub".
+|BINF BBBB HN0 HR1 HO2 NIsample_user DEsample\scontent SF123456 SS42 I4192.168.0.1 U46666 IDIPJJWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KC3I PDIJJJWEPPPLCA33F2ZCR7YO4F6ZXWE4NJ3WQ3C3I |An INF sent from a client (with the SID BBBB) containing the following information: the name is "sample_user", the description is "sample content", in three hubs in total (one as registered and two as operator), with a total share size of 42 bytes (with 123456 files) etc.
+|CINF IPJJWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KC3I TO123456789 |An INF is sent in a client to client connection indicating the CID and token.
+|=====
+
+==== MSG
+[options="header"]
+|=====
+|Example |Description
+|IMSG There\sare\s42\susers\sonline |A MSG that is sent from the hub with the message "There are 42 users online".
+|BMSG BBBB likes\scats ME1 |A MSG that is sent from a client (with SID BBBB), spoken in third person with the message "likes cats". This will appear like (or something similar) "john likes cats" (assuming that the user with BBBB has the name john).
+|DMSG CCCC BBBB I\sprefer\sdogs PMCCCC |A MSG is sent from a client to another client, spoken as a "private message", with the message "I prefer dogs".
+|=====
+
+==== SCH
+[options="header"]
+|=====
+|Example |Description
+|BSCH BBBB ANubuntu ANlinux NOgentoo EXISO EXIMG TO123456789 TY1 |A SCH that is sent from a client where the search terms "ubuntu" and "linux" should be in the file (TY1) name, excluding files that have "gentoo" in them. The extension of the file should be ISO or IMG. The token "123456789" is used.
+|BSCH BBBB ANubuntu LE4294967296 TO123456789 |A SCH that is sent from a client where the search term "ubuntu" should be in the file (TY1) name. The token "123456789" is used. The file must be less than 4 GiB in size (4294967296 bytes).
+|FSCH BBBB +TCP4 ANubuntu TO123456789 |A SCH that is sent from a client where the search term "ubuntu" should be in the file (TY1) name. The token "123456789" is used. The hub should only route the SCH to clients that support the feature TCP4.
+|=====
+
+==== RES
+[options="header"]
+|=====
+|Example |Description
+|DRES CCCC BBBB FN/share/linux/ubuntu.iso SI42 SL1 TO123456789 TRIPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII |A RES that is sent from a client (through the hub) indicating a response with the file name "ubuntu.iso" (and its path within the share), where the file sise is 42 bytes. The token "123456789" is used. The TR field indicate the hash of the file (see the TIGR extension).
+|URES IPJJWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII TRIPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII FN/share/linux/ubuntu.iso SI42 TO123456789| A RES that is sent from a client (via UDP) indicating a response with the file name "ubuntu.iso" (and its path within the share), where the file sise is 42 bytes. The token "123456789" is used. The TR field indicate the hash of the file (see the TIGR extension).
+|CRES FN/share/linux/ubuntu.iso SI42 |A RES that is sent from a client indicating a response with the file name "ubuntu.iso" (and its path within the share), where the file sise is 42 bytes.
+|=====
+
+==== CTM
+[options="header"]
+|=====
+|Example |Description
+|DCTM BBBB CCCC ADC/1.0 6666 123456789 |A CTM that is sent from a client to another client indicating that it wants to have a client to client connection. The protocol "ADC/1.0" is used. The port 6666 is used. The token is 123456789. The hub should only send this to the target user (with SID CCCC).
+|ECTM BBBB CCCC ADC/0.5 6666 123456789 |A CTM that is sent from a client to another client indicating that it wants to have a client to client connection. The (fictional) protocol "ADC/1.0" is used. The port 6666 is used. The token is 123456789. The hub should send this to the target user (with SID CCCC) and to the originating party (with SID BBBB).
+|=====
+
+==== RCM
+[options="header"]
+|=====
+|Example |Description
+|DRCM BBBB CCCC ADC/1.0 123456789 |A RCM that is sent from a client to another client indicating that it wants to have a client to client connection. The protocol "ADC/1.0" is used. TThe token is 123456789. The hub should only send this to the target user (with SID CCCC).
+|ERCM BBBB CCCC ADC/0.5 123456789 |A RCM that is sent from a client to another client indicating that it wants to have a client to client connection. The (fictional) protocol "ADC/0.5" is used. TThe token is 123456789. The hub should send this to the target user (with SID CCCC) and to the originating party (with SID BBBB).
+|=====
+
+==== GPA
+[options="header"]
+|=====
+|Example |Description
+|IGPA JJWEPPPLCA3PF2ZCRRYO3333 |A GPA that is sent from the hub indicating the password-response sequence with the random data JJWEPPPLCA3PF2ZCRRYO3333.
+|=====
+
+==== PAS
+[options="header"]
+|=====
+|Example |Description
+|HPAS YO4F2ZX2EV2JMW2KCIIYYYYY |A PAS that is sent from the client where the password and random data is hashed.
+|=====
+
+==== QUI
+[options="header"]
+|=====
+|Example |Description
+|IQUI BBBB |A QUI that is sent from the hub indicating that the client BBBB has disconnected.
+|IQUI BBBB IDCCCC MSCats\sare\shorrible DI1 TL-1 |A QUI that is sent from the hub indicating that the client BBBB has disconnected. The originator of the action is the client with the SID CCCC. The message "Cats are horrible" is included. All clients should terminate their connections with the client BBBB (DI1). The client should never attempt to reconnect (TL-1).
+|=====
+
+==== GET
+[options="header"]
+|=====
+|Example |Description
+|CGET file TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII 0 -1 |A GET that is sent from a client as a request for a file with the identifier TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII (see TIGR extension). The sending client should send the entire file.
+|CGET list /share/ 0 -1 RE1 |A GET that is sent from a client as a request for a directory with the identifier /share/. The sending client should send the directory and its subdirectories.
+|CGET file TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII 6666 3333 |A GET that is sent from a client as a request for a file with the identifier TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII (see TIGR extension). The sending client should send the next 3333 bytes, starting at byte position 6666.
+|=====
+
+==== GFI
+[options="header"]
+|=====
+|Example |Description
+|CGFI file TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII |A GFI that is sent from a client as a request for file information for a file with the identifier TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII (see TIGR extension). 
+|CGFI list /share/ |A GFI that is sent from a client as a request for directory information with the identifier /share/.
+|=====
+
+==== SND
+[options="header"]
+|=====
+|Example |Description
+|CSND file TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII 0 9999 |A SND that is sent from a client prior to streaming data for the file with the identifier TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII (see TIGR extension). The sending client indicates that it will send 9999 bytes and start streaming at the byte position 0 (the beginning of the file).
+|CSND list /share/ 0 66 |A SND that is sent from a client prior to streaming data for the directory with the identifier /share/. The sending client indicates that it will send 66 bytes.
+|CSND file TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII 6666 3333 |A SND that is sent from a client prior to streaming data for the file with the identifier TTH/IPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII (see TIGR extension). The sending client indicates that it will send 3333 bytes and start streaming at the byte position 6666.
+|=====
+
+== Terminology
+
+[options="autowidth,header"]
+|=====
+|Term |Description
+|FOURCC |Four character code. This may be the message type followed by the command, e.g. "ISTA", "BMSG" etc. This may also be the name of a feature (BASE, TIGR etc). Any four character identification.
+|Server |The hub is the 'server' in a client - hub context. The client receiving the incoming connection is the 'server' in a client - client context.
+|Base32 |An encoding used by the protocol, see RFC 4648 for more information about Base32. Note that the Base32 implementation in ADC is never padded.
+|Context |When a command states a context, e.g. "T" (To hub), it defines an expectance on the flow of traffic. A context may refer to one or multiple message types. For example, for the context 'T', the message types "B", "C", "D", "E", "F" and "H" are valid. Note that the context is not a restriction in any way, implementations may further extend a command's expected contexts.
+|=====
+
+== Standard Extensions
+
+Apart from supporting BASE, clients may opt to implement one or more of the 
+following standard extensions. To be considered for addition, an extension must
+be well documented and must be implemented and tested in the real world. 
+
+While in development, extensions are tracked here: 
+http://adc.sourceforge.net/wiki/index.php/Extensions
+
+Once they have been tried and accepted, they're moved to the official extensions
+document that accompanies this one.
+
+// vim: set syntax=asciidoc:

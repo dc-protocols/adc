@@ -1,0 +1,287 @@
+= ADC Recommendations
+version 1.2.0, UNRELEASED
+
+== Abstract
+These are the official recommendations to ADC. This document is based on the information contained in the ADC documents, ADC wiki and ADC blog. Information is this document should be taken as guide lines to implementations.
+
+== Version history
+The latest draft of the next version of this document as well as intermediate
+and older versions can be downloaded from
+$URL: https://svn.code.sf.net/p/adc/code/trunk/ADC-Recommendation.txt $.
+
+This version corresponds to $Revision: 1 $.
+
+=== Version 1.2.0, UNRELEASED
+
+* Added client and hub implementation outlines
+
+=== Version 1.1.0, 2013-12-21
+Fredrik Ullner, <ullner@gmail.com>
+
+* Added ZLIB recommendation
+* Added SID recommendations/considerations.
+
+=== Version 1.0.0, 2010-07-01
+Fredrik Ullner, <ullner@gmail.com>
+
+* Initial release
+
+== General recommentations
+
+Message length
+Messages can be constructed to be long or short with varying complexity. All messages that contain a positional parameter can also contain additional named parameters. This mean that implementations must be able to read enough data to accuratley be aware of additional data. This also means that it may be in the implementations' interest to stop processing after an excessive amount of data, but implementations should strive to be as resiliant as possible. Certain messages that require parsing of specific parts, their context and content (e.g. regular expressions) may very well be short but nontheless pose a security issue if not dealt with appropriately.
+
+== STA recommendations
+Clients should display text messages appropriately depending on context, severity and error code. It is recommended to display the error message regardless of the error code. Hubs must not depend on where clients display error codes.
+
+While STA messages require a severity to accompany the error code, the severity may not be of importance to some error codes or are simply implied by the actual error code. However, it is important that the severity is sent as appropriate and is accurate. STA messages with 0 (success) for severity can usually be regarded by implementations that the information require little or no counter-action.
+The following list include error codes that make no or little sense in one or many severities, and a description why they are best used in one or only some severities. The descriptive text for the error codes can be seen in the STA specification, but may be re-stated as part of the description why they can have severity restriction(s).
+
+[options="autowidth"]
+|=====
+|11 |If the hub is full, it makes little sense in keeping the client in some "connected" state. The recommended severity is to use 2 (fatal) to force the client to reconnect at a later time.
+|12 |Similar to error code 11.
+|21 |While potentially fatal, the client may resend its INF with a new NI field. The recommended severity for hubs is to use 2 (fatal) but they can use 1 (recoverable).
+|22 |Similar to error code 21.
+|23 |An invalid password depend on whether the hub wish to allow the client to resend its password (say, if the transmission became garbled). However, the recommended severity is to use 2 (fatal) unless under special circumstances, for some clients or for some users.
+|24 |The recommended severity is to use 2 (fatal).
+|25 |Can be 1 (recoverable) or 2 (fatal) but generally not 0 (sucess).
+|26 |If the user is not registered in the hub, it makes little sense to try to reconnect immediately. The recommended severity is to use 2 (fatal).
+|27 |Similar to error code 24.
+|30 |The recommended severity is to use 2 (fatal).
+|31 |Must be 2 (fatal).
+|32 |Must be 2 (fatal).
+|43 |Information that is missing or is bad is generally grounds for a disconnect but may be recoverable under certain states. The recommended severity is to use 2 (fatal).
+|44 |Similar to error code 43.
+|45 |Similar to error code 43.
+|46 |Similar to error code 43.
+|47 |Must be 2 (fatal).
+|50 |May be cause for a disconnect but is generally recoverable. The recommended severity is to use 1 (recoverable).
+|51 |Similar to error code 50.
+|52 |Similar to error code 50.
+|53 |Similar to error code 11.
+|54 |Must be 2 (fatal).
+|=====
+
+== ZLIB compression
+
+=== Generic
+
+* Try to keep constant and almost constant named parameters together, that way there is a higher likelyhood for a longer parameter match.
+* When possible try to keep similar commands no more than a window size (usually 32 bits if highest rate is used) away, that ensures you will benefit from the redundancy provided by these (this may be particularly important when sending large strings like MOTDs or help and configuration values intertwined with other commands).
+* Syncing is important to keep the clients updated but when you sync some bytes are sent (the sync ones and the ones for the Huffman tree of the new packet if it is a type 2 packet) as such it may make sense to keep in different queues commands depending on how much latency matters for them, for example you may want to keep low latency for MSG commands and send them frequently but may prefer to send searches or passive results together each half second or so. Also latencies matter depending on the type of network, on a LAN users expect most things to happen almost inmediately (especially things like MSGs) whilst clients connecting over a classic DSL line may not care that much for higher latencies.
+
+== SID generation
+The following are different algorithms for hubs to allocate and assign session IDs (SIDs) to clients.
+
+=== Background
+
+In ADC the Session ID (or SID) uniquely identifies a user while connected to a hub, and the user will be assigned a SID at the time of login. Once assigned, the SID cannot be changed without a reconnect.
+
+The SID is a 4 byte sequence of Base32 characters consisting of 32 possible characters, A-Z and 2-7. This means there can be 32^4 different SIDs (slightly over 1 million).
+
+=== Algorithms
+The following algorithms are ways one can manage the SIDs that are assigned.
+
+==== Random SID allocation
+1. When client logs in: SID = random number between 1 and 1048576.
+2. if (SID in use) go to 1.
+3. Assign SID to user.
+
+Advantages:
+
+* Very simple to implement.
+
+Disadvantages:
+
+* Theoretically, if a hub has close to the maximum allowed users (1 million), the algorithm of generating a unique SID becomes very costly. On a hub consiting of a few thousand users this is negligible if looking up users based on SID is fast. 
+
+Notes: 
+
+* The algorithm requires that lookup of users must be as cheap as possible.
+
+==== Incremental SID allocation
+1. When hub starts, set: counter = 0
+2. When client logs in: SID = ((++counter) % 1048576)
+3. if (counter > 1048576) and (SID == 0 or in use) go to 2.
+4. Assign SID to user.
+
+Advantages:
+
+* Simple to implement. 
+* For the first 1048576 allocated SIDs one does not need to check for SID collisions.
+
+Disadvantages:
+
+* Information leak: Assuming less than 1 million login attempts have been made, one can easily figure out how many users have logged in before. 
+
+Notes:
+
+* The algorithm requires that lookup of users must be as cheap as possible.
+
+==== Pre-allocated recyclable SIDs
+1. Allocate a queue large enough to contain SIDs for the maximum users allowed (or dynamically, regarding the user count and the maximum allowed)
+2. Pre-initialize the queue with unique SIDs (for example in ascending order)
+3. When client logs in: Assign the first SID from the end of the queue
+4. When client logs out: push the SID to the beginning of the queue
+
+Advantages:
+
+* No need to check for duplicate SIDs when users log in.
+
+Disadvantages:
+
+* If max_users is too large, a lot of memory is allocated but not used (one can allocate as users come in, the maximum user count would be just a reference)
+
+* If the queue is kept as a linked list of SIDs, even more memory is allocated.
+
+* If the queue is kept as an array, a lot of memory moving needs to be performed when users log out.
+
+* Changing the maximum users limit while the hub is running is slightly more complicated (see below).
+
+* Negligible: While starting up, the hub needs to allocate and fill the queues.
+
+Notes:
+
+* Changing the maximum users limit: 
+** if maximum users is increased, another set of unique SIDs needs to be added to the front of the queue. 
+** if maximum users is decreased, no change is needed, it just means the queue will still have unused elements in it if the hub becomes full (or remove some elements from the not used end of the queue).
+
+==== Incremental recyclable SID allocation
+1. When hub starts, set counter = 0.
+2. When client logs in: take last element of SID array if exist and delete it or SID = something like ((++counter) % 1048576).
+3. Assign SID to user.
+4. When client logs out: store client SID as last element in SID array.
+
+Advantages:
+
+* Simple to implement.
+* You never need to check collisons.
+
+Disadvantages:
+
+* Information leak: you can find out the max user peak of the hub in a session.
+* The SID array grows when more clients logout then login; in worst case, the hub is empty and the array contains all created SIDs of the session.
+
+== Client implementation
+A client can be implemented by following this rough outline. The outline may not specify everything to full detail and will not cover the actual application that shall employ the mechanisms.
+
+There are six sections that need to be implemented to support the major parts of the protocol. They are, in order: connectivity, chatting, downloading, sharing/uploading, search/response. The left out section ("other") is strict protocol compatibility, for additional items that are not necessary to support at first: these things should be implemented alongside basic support for each section.
+
+This outline assumes that there is a hub available and (for the relevant sections) that another client is present.
+
+No part of this outline requires a particular programming language.
+
+Note that all messages end with a newline, which are excluded from this description.
+
+=== Connectivity
+This section describes the necessary parts to implement basic connectivity to a hub. The client will, after this stage, be able to continue on with chatting or file sharing. Without basic connectivity, obviously nothing can done in the client.
+
+==== Steps
+1. Create a network connection to a hub on the appropriate port.
+
+2. The client shall send the following message:
+* HSUP ADBASE ADTIGR
+** This indicates that the client is notifying the hub about supporting the base protocol (BASE) and the extension hash method Tiger (TIGR). If the protocol base version is changed, send that instead of BASE. Similarly, if another hash method is preferred, send that instead.
+
+3. The hub will send:
+* ISUP ADBASE ADTIGR
+** The hub may include other things it "AD"s, but none of these are interesting.
+
+4. The hub will send:
+* ISID ABCD
+** ABCD is the SID that shall be used in any further communication from the client (where applicable). Store this value.
+
+5. Optionally, a hub may send the following but is not required:
+* IINF CT32 NIhub_name
+** None of these parameters are needed for continuing the connectivity, although may come in handy in the future. The value in the NI parameter can be used for e.g. the application or tab name.
+
+6. The client shall send the following message
+* BINF ABCD ID<CID> PD<PID> NImy_name
+** ABCD here is the SID as previously mentioned. The CID and PID are complementary information and are specified in the "Client identification section". The client should generate an internal CID (and associated PID). The CID and PID that the client sends to the hub have been run through a Base32 conversion.
+
+7. If the hub did not send its "IINF" before, it may do so now. Again, the information shouldn't be deemed as required.
+
+8. The hub may send a password request, see section "Other".
+
+9. The hub will send all other users that are logged in:
+* BINF sid ID<CID> NI<nick>
+** Where SID and CID is the client information. The SID is used to create a mapping between client -> user. Note that the PID is never broadcast.
+
+10. The last BINF to arrive will be the information you connected with:
+* BINF ABCD ID<your-CID> NImy_name
+
+11. The client will now be fully logged in.
+
+=== Chat
+.
+
+=== Downloading
+.
+
+=== Sharing
+.
+
+=== Search
+.
+
+=== Other
+.
+
+== Hub implementation
+A client can be implemented by following this rough outline. The outline may not specify everything to full detail and will not cover the actual application that shall employ the mechanisms.
+
+=== Steps
+1. Hub accepts network connection.
+* Set client state to NEW.
+
+2. Hub waits for handshake from client.
+* Client will send: 
+** HSUP ADBASE ...
+
+3. Hub checks support line responds.
+
+4. Server sends:
+* ISUP ADBASE ...
+
+5. Hub allocates a SID, and sends it to the client:
+* ISID ...
+
+6. Hub sends the hub information to the client:
+* IINF ...
+
+7. Hub waits for client to send info:
+* Client will send:
+** BINF ...
+* Set client state to IDENTIFY.
+
+8. Hub validates info from client
+* If password verification is needed, then go to 9, otherwise 11.
+
+9. If user needs to log in, request password
+* Set client state to VERIFY
+* Hub sends:
+** IGPA ...
+
+10. Wait for and verify password from client:
+* HPAS ...
+
+11. Hub transmits the userlist of all existing users to the client.
+
+ BINF ...
+ BINF ...
+ ...
+ BINF ...
+
+12. Hub broadcasts the client's info (BINF) to all users, including the client.
+* Set client state to NORMAL.
+* Server sends:
+** BINF ...
+
+13. At this point the client is considered logged in, and will receive all 
+broadcast messages and all direct messages from other clients.
+It will also forward messages originating from this client to others, if the
+messages are correct (syntax, formatting, source SID, etc).
+
+
+// vim: set syntax=asciidoc:

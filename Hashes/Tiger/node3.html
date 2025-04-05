@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD>
+<TITLE> Specification</TITLE>
+</HEAD>
+<BODY>
+<meta name="description" value=" Specification">
+<meta name="keywords" value="tiger">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+ <BR> <HR><A NAME=tex2html40 HREF="node4.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html38 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html32 HREF="node2.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html41 HREF="node4.html"> Security</A>
+<B>Up:</B> <A NAME=tex2html39 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html33 HREF="node2.html"> Our Proposal</A>
+<BR> <HR> <P>
+<H1><A NAME=SECTION00030000000000000000> Specification</A></H1>
+<P>
+In Tiger all the computations are on 64-bit words, in
+little-endian/2-complement representation. We use three 64-bit
+registers called a, b, and c as the intermediate hash values. These
+registers are initialized to <IMG  ALIGN=MIDDLE ALT="" SRC="img5.gif"> which is:
+<P>
+<PRE>      a = 0x0123456789ABCDEF
+      b = 0xFEDCBA9876543210
+      c = 0xF096A5B4C3B2E187
+</PRE>
+<P>
+Each successive 512-bit message block is divided into eight 64-bit words x0,
+x1, ..., x7, and the following computation is performed to update <IMG  ALIGN=MIDDLE ALT="" SRC="img6.gif"> to 
+<IMG  ALIGN=MIDDLE ALT="" SRC="img7.gif">.
+<P>
+This computation consists of three passes, and between each of them there is a
+<i> key schedule</i> --- an invertible transformation of the input data which
+prevents an attacker forcing sparse inputs in all three rounds. Finally there
+is a feedforward stage in which the new values of a, b, and c are combined with
+their initial values to give <IMG  ALIGN=MIDDLE ALT="" SRC="img8.gif">:
+<P>
+<PRE>      save_abc
+      pass(a,b,c,5)
+      key_schedule
+      pass(c,a,b,7)
+      key_schedule
+      pass(b,c,a,9)
+      feedforward
+</PRE>
+<P>
+where
+<P>
+<OL><LI> <tt> save_abc</tt> saves the value of <IMG  ALIGN=MIDDLE ALT="" SRC="img9.gif">
+<P>
+<PRE>      aa = a ;
+      bb = b ;
+      cc = c ;
+</PRE>
+<P>
+<LI> <tt> pass(a,b,c,mul)</tt> is
+<P>
+<PRE>      round(a,b,c,x0,mul);
+      round(b,c,a,x1,mul);
+      round(c,a,b,x2,mul);
+      round(a,b,c,x3,mul);
+      round(b,c,a,x4,mul);
+      round(c,a,b,x5,mul);
+      round(a,b,c,x6,mul);
+      round(b,c,a,x7,mul);
+</PRE>
+<P>
+where <tt> round(a,b,c,x,mul)</tt> is
+<P>
+<PRE>      c ^= x ;
+      a -= t1[c_0] ^ t2[c_2] ^ t3[c_4] ^ t4[c_6] ;
+      b += t4[c_1] ^ t3[c_3] ^ t2[c_5] ^ t1[c_7] ;
+      b *= mul;
+</PRE>
+<P>
+and where <code>c_i</code> is the <b>i</b>th byte of <b>c</b> (<IMG  ALIGN=MIDDLE ALT="" SRC="img10.gif">). Note that we
+use the notation of the C programming language, where <code>^</code> denotes the XOR
+operator, and the notation <code>X op= Y</code> means <code>X = X op Y</code>, for any
+operator <code>op</code>.  The S boxes t1 to t4 would take ten pages to publish here,
+so they will be published electronically along with the full source code, and
+made available from the authors' world wide web home pages.
+<P>
+
+<P>
+<P>
+<LI> <tt> key_schedule</tt> is
+<P>
+<PRE>      x0 -= x7 ^ 0xA5A5A5A5A5A5A5A5; 
+      x1 ^= x0; 
+      x2 += x1; 
+      x3 -= x2 ^ ((~x1)&lt;&lt;19); 
+      x4 ^= x3; 
+      x5 += x4; 
+      x6 -= x5 ^ ((~x4)&gt;&gt;23); 
+      x7 ^= x6; 
+      x0 += x7; 
+      x1 -= x0 ^ ((~x7)&lt;&lt;19); 
+      x2 ^= x1; 
+      x3 += x2; 
+      x4 -= x3 ^ ((~x2)&gt;&gt;23); 
+      x5 ^= x4; 
+      x6 += x5; 
+      x7 -= x6 ^ 0x0123456789ABCDEF;
+</PRE>
+<P>
+where <code>&lt;&lt;</code> and <code>&gt;&gt;</code> are logical (rather than arithmetic) shift left 
+and shift right operators.
+<P>
+<LI> <tt> feedforward</tt> is
+<P>
+<PRE>      a ^= aa ;
+      b -= bb ;
+      c += cc ;
+</PRE>
+<P>
+The resultant registers a, b, c are the 192 bits of the (intermediate) hash 
+value <IMG  ALIGN=MIDDLE ALT="" SRC="img11.gif">.
+</OL>
+<P>
+Figure <A HREF="node3.html#figh95">1</A>
+<P><A NAME=39>&#160;</A><A NAME=figh95>&#160;</A><IMG  ALIGN=BOTTOM ALT="" SRC="img12.gif">
+<BR><STRONG>Figure 1:</STRONG> Outline of the compression function of Tiger<BR>
+<P>
+describes the compression function. In this figure the black area denotes the
+affected registers, where the slanted lines point to the affecting bytes in
+the white area. The variables y0, y1, ..., y7, and z0, z1, ..., z7
+denote the values of x0, x1, ..., x7 in the second and the third passes,
+respectively. Finally, the last intermediate value <IMG  ALIGN=MIDDLE ALT="" SRC="img13.gif"> is taken as the output
+of Tiger/192.
+<P>
+
+<P>
+<BR> <HR><A NAME=tex2html40 HREF="node4.html"><IMG ALIGN=BOTTOM ALT="next" SRC="http://cbl.leeds.ac.uk/nikos/figs//next_motif.gif"></A>   <A NAME=tex2html38 HREF="tiger.html"><IMG ALIGN=BOTTOM ALT="up" SRC="http://cbl.leeds.ac.uk/nikos/figs//up_motif.gif"></A>   <A NAME=tex2html32 HREF="node2.html"><IMG ALIGN=BOTTOM ALT="previous" SRC="http://cbl.leeds.ac.uk/nikos/figs//previous_motif.gif"></A>         <BR>
+<B> Next:</B> <A NAME=tex2html41 HREF="node4.html"> Security</A>
+<B>Up:</B> <A NAME=tex2html39 HREF="tiger.html">Tiger: A Fast New </A>
+<B> Previous:</B> <A NAME=tex2html33 HREF="node2.html"> Our Proposal</A>
+<BR> <HR> <P>
+<BR> <HR>
+<P><ADDRESS>
+<I>Eli Biham <BR>
+Thu Feb  8 15:00:23 IST 1996</I>
+</ADDRESS>
+</BODY>
