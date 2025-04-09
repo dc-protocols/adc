@@ -1,6 +1,6 @@
 # ADC protocol documentation
 
-This repository contains the official ADC protocol specification formatted in https://asciidoc3.org/userguide.html
+This repository contains the official ADC protocol specification formatted in https://asciidoc3.org/documentation/userguide/
 
 The HTML version was generated using AsciiDoc3 3.2.3 with following command line:
 
