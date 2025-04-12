@@ -10,7 +10,7 @@ This document apply to at least ADC.txt and ADC-EXT.txt but may be extended for 
 == Version history
 The latest draft of the next version of this document as well as intermediate
 and older versions can be downloaded from
-$URL: https://adc.svn.sourceforge.net/svnroot/adc/trunk/ADC-PRD.txt $. 
+$URL: https://github.com/dc-protocols/adc/blob/main/ADC-PRD.txt $. 
 This version corresponds to $Revision: 98 $.
 
 === Version 1.0.0, UNRELEASED
@@ -63,13 +63,13 @@ These items need not be performed in order, except when certain items directly h
 === Document generation
 The document may be in the form of a ASCIIDoc file. If so, the file should have an accomponaying ".conf" file. With ASCIIDoc, run the following command;
 
- ASCIIDoc.py -a toc file.txt
+ asciidoc3 file.txt
 
 This will generate the file "file.html".
 
 Example
 ====
-ASCIIDoc.py -a toc ADC.txt
+asciidoc3 ADC.txt
 ====
 
 === Manage web space

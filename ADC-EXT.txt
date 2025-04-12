@@ -9,7 +9,7 @@ when they are mature and stable enough.
 == Version history
 The latest draft of the next version of this document as well as intermediate
 and older versions can be downloaded from
-$URL: file:///svn/p/adc/code/trunk/ADC-EXT.txt $.
+$URL: https://github.com/dc-protocols/adc/blob/main/ADC-EXT.txt $.
 
 This version corresponds to $Revision: 125 $.
 
@@ -791,7 +791,7 @@ Parties supporting OID commands MUST advertise the ONID (ONline IDentification) 
 
 Parameters of the OID and OIR commands:
 
-- Unnamed parameter in first position to designate the service this command is referring to. Known services are listed in the "Known ONID services" (ADC-ONIDServices.txt) document; they are matched case-insensitively. Implementers willing to use an unlisted service SHOULD let ADC managers know about it.
+- Unnamed parameter in first position to designate the service this command is referring to. Known services are listed in the "Known ONID services" (ADC-OID.txt) document; they are matched case-insensitively. Implementers willing to use an unlisted service SHOULD let ADC managers know about it.
 
 - Optional named parameters whose meanings depend on the service in question.
 

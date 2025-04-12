@@ -7,7 +7,7 @@ These are the services for the ONID command. See ADC-Ext for the ONID specificat
 == Version history
 The latest draft of the next version of this document as well as intermediate
 and older versions can be downloaded from
-$URL: https://adc.svn.sourceforge.net/svnroot/adc/trunk/ADC-ONIDServices.txt $.
+$URL: https://github.com/dc-protocols/adc/blob/main/ADC-OID.txt $.
 
 This version corresponds to $Revision: 1 $.
 

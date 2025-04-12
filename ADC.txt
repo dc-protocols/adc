@@ -21,7 +21,7 @@ Connect idea through the Neo-Modus Direct Connect client / hub.
 == Version history
 The latest draft of the next version of this document as well as intermediate
 and older versions can be downloaded from
-$URL: file:///svn/p/adc/code/trunk/ADC.txt $. 
+$URL: https://github.com/dc-protocols/adc/blob/main/ADC.txt $. 
 This version corresponds to $Revision: 126 $.
 
 === Version 1.0.4, UNRELEASED
@@ -970,7 +970,7 @@ following standard extensions. To be considered for addition, an extension must
 be well documented and must be implemented and tested in the real world. 
 
 While in development, extensions are tracked here: 
-https://adc.sourceforge.io/ADC-EXT.html
+https://dc-protocols.github.io/ADC-EXT.html
 
 Once they have been tried and accepted, they're moved to the official extensions
 document that accompanies this one.
