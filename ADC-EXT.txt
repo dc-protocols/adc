@@ -1,5 +1,9 @@
 ﻿= ADC Extensions
-1.0.9, UNRELEASED
+:author: DC++ Team
+:email: dcplusplus-devel@lists.sourceforge.net
+:revdate: 2025-05-07
+:revnumber: 1.0.9
+:lang: en
 
 == Abstract
 These are the official extensions to ADC. This document is based on the
@@ -8,13 +12,15 @@ when they are mature and stable enough.
 
 == Version history
 The latest draft of the next version of this document as well as intermediate
-and older versions can be downloaded from
-$URL: https://github.com/dc-protocols/adc/blob/main/ADC-EXT.txt $.
+and older versions can be downloaded from: 
+https://github.com/dc-protocols/adc/blob/main/ADC-EXT.txt
 
-This version corresponds to $Revision: 125 $.
+== Version 1.0.9, 2025-05-07
+DC++ Team <dcplusplus-devel@lists.sourceforge.net>
 
-== Version 1.0.9, UNRELEASED
-
+* Added implementation notes to BLOM
+* Added 'CCPM' extension for client to client private messages
+* Editorial updates
 * Clarified HH field in PING to be an ADC URL
 
 === Version 1.0.8
@@ -98,14 +104,14 @@ Jacek Sieka <arnetheduck@gmail.com>, 2008-05-02
 
 This extension adds Tiger tree hash support to the base protocol. It is
 intended to be used both for identifying files and for purposes such as CID
-generation and password negotiation
+generation and password negotiation.
 
 ==== TIGR for shared files
 All files shared by TIGR supporting clients must have been hashed using Merkle
 Hash trees, as defined by
-http://web.archive.org/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html.
+https://web.archive.org/web/20080316033726/http://www.open-content.net/specs/draft-jchapweske-thex-02.html.
 The Tiger
-algorithm, as specified by http://www.cs.technion.ac.il/~biham/Reports/Tiger/,
+algorithm, as specified by https://biham.cs.technion.ac.il/Reports/Tiger/,
 functions as the hash algorithm. A base segment size of 1024 bytes must be
 used when generating the tree, but clients may then discard parts of the tree
 as long as at least 7 levels are kept or a block granularity of 64 KiB is
@@ -123,7 +129,7 @@ containing the base32-encoded value of the Tiger tree root.
 
 In the GET/GFI type, the full tree may be accessed using the "tthl" type.
 
-"tthl" transfers send the largest set of leaves available) as a binary stream
+"tthl" transfers send the largest set of leaves available as a binary stream
 of leaf data, right-to-left, with no spacing in between them.  <start_pos>
 must be set to 0 and <bytes> to -1 when requesting the data.  <bytes> must
 contain the total binary size of the leaf stream in SND; by dividing this
@@ -167,7 +173,7 @@ share which contains "files.xml" compressed with bzip2 1.0.3+ (www.bzip.org).
 
 === ZLIB - Compressed communication
 There are two variants of zlib support, FULL and GET, and only one should be
-used on a each communications channel set up.
+used on each communications channel set up.
 
 ==== ZLIB-FULL
 If, during SUP negotiation, a peer sends "ZLIF" in its support string, it must
@@ -338,7 +344,7 @@ File parameters
 [options="autowidth"]
 |=====
 |fileXX |One for each flag contained within a search result or file list entry (see RES)
-|fileMN |Specify magnet link. http://en.wikipedia.org/wiki/Magnet_link[Magnet links] are used to reference files across networks and applications. Clients may ignore parameters it does not understand, but are free to pass on the parameters to other programs.
+|fileMN |Specify magnet link. https://en.wikipedia.org/wiki/Magnet_link[Magnet links] are used to reference files across networks and applications. Clients may ignore parameters it does not understand, but are free to pass on the parameters to other programs.
 |=====
 
 Hub parameters
@@ -372,7 +378,7 @@ Bloom filters allow the hub to filter certain searches using bitmap that represe
 |m |Size of the bloom filter in bits
 |k |Number of sub-hashes constructed from the file hash
 |h |Number of bits to use for each sub-hash
-|p |Propability of a false positive
+|p |Probability of a false positive
 |=====
 
 The hub chooses k, h and m.
@@ -427,10 +433,15 @@ p = (1 - (1 - 1 / m)^(k * n)^)^k^, thus p becomes smaller as m grows and larger 
 ===== Tiger
 For TTH roots, b is 192 and a reasonable value for h is 24, giving a maximum k = 8 which means that m = 8 * n / ln 2 ≈ 11.5 * n. The required bandwidth then becomes 11.5 * n / 8 bytes, so approximately 1.44 bytes per file in the users share. For 20000 files, m should then be 230016 (taking into account the modulo 64 requirement), giving a p = 0.004, in other words ~99.6% of all searches that don't match a users share would not be sent, saving valuable upload bandwidth for the hub. The client calculates i valid positions, if x is an array of bytes containing the hash of the file, on a little-endian machine, by doing pos = x[0+i*h/8] | (x[1+i*h/8] << 8) | (x[2+i*h/8] << 16) for i = [0;k). This is of course a special case where h % 8 = 0, the actual algorithm has to take into consideration values for h where the integer crosses byte boundaries. 
 
-For test vectors, see the http://www.adcportal.com/wiki/index.php/Talk:BLOM[ADC wiki talk page].
+For test vectors, see the https://adc.sourceforge.io/wiki/index.php/Talk:BLOM[ADC wiki talk page].
+
+==== Implementation notes
+Clients do not signal each atomic user update of the share using the SF flag. Instead, they tend to send a cumulative result of multiple updates in a timely fashion. However, an unambiguous summary of the number of hash additions and removals may result in a lack of an update signal. Therefore, hubs are recommended to look for and process INFs containing the SS flag as well, since an incoming SS flag (especially when not accompanied by an SF) may also indicate an update in the hashes, one that occurs without a change in the total number of files shared.
+
+Clients shall strive to signal multiple share updates in an unambiguous manner, thus enabling hubs to request the most accurate and up-to-date version of the client's bloom filter.
 
 === NATT - NAT traversal
-NAT traversal allow two passive clients to connect to each other. This specification is based on the TCP hole punching algorithm described in footnoteref:[Peer-to-Peer Communication Across Network Address Translators, B. Ford and P. Srisuresh and and D. Kegel. "Peer-to-Peer Communication Across Network Address Translators". In USENIX Technical Conference 2005 - pages 179–192. Online version: http://www.brynosaurus.com/pub/net/p2pnat/].
+NAT traversal allow two passive clients to connect to each other. This specification is based on the TCP hole punching algorithm described in footnoteref:[Peer-to-Peer Communication Across Network Address Translators, B. Ford and P. Srisuresh and and D. Kegel. "Peer-to-Peer Communication Across Network Address Translators". In USENIX Technical Conference 2005 - pages 179–192. Online version: https://bford.info/pub/net/p2pnat/].
 
 If a client does not support TCP4 or TCP6, it will send an RCM to the client it is trying to connect to. If the other client also doesn't support TCP4 (or TCP6 correspondingly), NAT traversal may instead be used. Signal NATT in the INF's SU field.
 
@@ -530,7 +541,7 @@ Information about downloaded and verified chunks is sent to requester with this 
 === LC - Locale specification
 This extension's purpose is to notify the hub which user locale the client is using as well as the default locale for the hub. This allows hubs to customize text sent to clients, depending on language, left-to-right or right-to-left and more. If the hub does not directly support the client's locale, it should attempt to fall back to the same language group (e.g. hub supports en-US but not en-AU, so falls back to en-US), and if this is not available, then fall back to the hub's own locale. 
 
-http://tools.ietf.org/html/bcp47[BCP47] should be used as reference for locale structure.
+https://www.rfc-editor.org/info/bcp47[BCP47] should be used as reference for locale structure.
 
 [options="autowidth"]
 |=====
@@ -648,7 +659,7 @@ There is a potential chance that decryption succeed with what is a bad key. If t
 Note that in a normal circumstance, the client will most likely be using relatively few active keys.
 
 === TYPE - Typing notification
-This extension adds a typing similar to Jabber's http://www.xmpp.org/extensions/xep-0085.html["Chat state notifications"].
+This extension adds a typing similar to Jabber's https://xmpp.org/extensions/xep-0085.html["Chat state notifications"].
 
 Signal TYPE in SUP and the INF's SU field.
 
@@ -672,7 +683,7 @@ Code values:
 |=====
 
 === FEED - RSS feeds
-The extension adds http://en.wikipedia.org/wiki/RSS[RSS feed] support.
+The extension adds https://en.wikipedia.org/wiki/RSS[RSS feed] support.
 
 Signal FEED in SUP and the INF's SU field.
 
@@ -1023,6 +1034,31 @@ Permanent Multiple Choice Redirect
 |=====
 |Example |Description
 |IQUI BBBB IDAAAA MSWe\shave\sADCS\snow! RDadc://example.com:1001 RXadcs://example.com:1002 PT1 TL0 |Here user BBBB is redirected permanently with a choice between ADC and ADCS URI, if and only if either of the URI's matches the URI of the current hub connection and the matching URI is chosen BBBB will reconnect immediately. Sending a redirect like this to all connected clients (once) can be used to attempt to migrate them to ADCS instance of a hub.
+|=====
+
+=== CCPM - Client to client private messages
+
+This extension adds support for private messages in a client to client context. The extension adds support for the C-type for MSG, and uses the field "PM" in the (C-type) INF to signal that the connection should be used for private messages. Implementations supporting this extension must signal "CCPM" in the SU field of their hub-targeted INF.
+
+Implementations should differentiate between a C-C transfer connection and a C-C private message connection, so as to allow transfers and chat at the same time. The initiating client should issue a secondary CTM/RCM sequence to deal with the other connection. Implementations shall disallow GET (and other file transfer commands) in the private message connection.
+
+Implementations are strongly discouraged but may choose to allow private messages in unencrypted connections. 
+
+Implementations may choose for which users that are allowed to send them private messages, so as to avoid spam (e.g., only trusted users, hub operators etc may initiate a C-C private message).
+
+Absence of the "PM" field from the (C-type) INF shall cause a disconnect of the connection (with an appropriate STA).
+
+Implementations may decide what to do when the hub connection is lost during a private message connection. 
+
+Implementations should adhere to any requirements the DI field in the QUI command in BASE poses regarding non-file transfer connections. Further actions beyond that are up to implementations.
+
+The same port may, but needn't be, reused for a file transfer connection and a private message connection. Concurrent connections may be rendered unfeasible with extensions such as NATT.
+
+The "PM" field of the MSG command should not be used in C-C private messages.
+
+[options="autowidth"]
+|=====
+|PM |Field in the CINF to denote that the connection should be used for private messages. The field's value should be '1'.
 |=====
 
 // vim: set syntax=asciidoc:

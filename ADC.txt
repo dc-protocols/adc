@@ -1,5 +1,9 @@
 = ADC Protocol
-version 1.0.4, UNRELEASED
+:author: DC++ Team
+:email: dcplusplus-devel@lists.sourceforge.net
+:revdate: 2025-05-07
+:revnumber: 1.0.4
+:lang: en
 
 == Abstract
 ADC is a text protocol for a client-server network similar to Neo-Modus'
@@ -20,12 +24,13 @@ Connect idea through the Neo-Modus Direct Connect client / hub.
 
 == Version history
 The latest draft of the next version of this document as well as intermediate
-and older versions can be downloaded from
-$URL: https://github.com/dc-protocols/adc/blob/main/ADC.txt $. 
-This version corresponds to $Revision: 126 $.
+and older versions can be downloaded from: 
+https://github.com/dc-protocols/adc/blob/main/ADC.txt
 
-=== Version 1.0.4, UNRELEASED
+=== Version 1.0.4, 2025-05-07
+DC++ Team <dcplusplus-devel@lists.sourceforge.net>
 
+* Editorial updates
 * Separators in the command description for GET, GFI and SND are now explicit.
 * Clarified UTF-8 encoding note.
 
@@ -218,7 +223,7 @@ validate against the following XML schema:
 
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xs="https://www.w3.org/2001/XMLSchema">
   <xs:simpleType name="base32Binary">
     <xs:restriction base="xs:string">
       <xs:pattern value="[A-Za-z2-7]+"></xs:pattern>
@@ -883,8 +888,8 @@ Note that examples listed here omit the trailing newline character that shall al
 [options="header"]
 |=====
 |Example |Description
-|DRES CCCC BBBB FN/share/linux/ubuntu.iso SI42 SL1 TO123456789 TRIPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII |A RES that is sent from a client (through the hub) indicating a response with the file name "ubuntu.iso" (and its path within the share), where the file sise is 42 bytes. The token "123456789" is used. The TR field indicate the hash of the file (see the TIGR extension).
-|URES IPJJWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII TRIPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII FN/share/linux/ubuntu.iso SI42 TO123456789| A RES that is sent from a client (via UDP) indicating a response with the file name "ubuntu.iso" (and its path within the share), where the file sise is 42 bytes. The token "123456789" is used. The TR field indicate the hash of the file (see the TIGR extension).
+|DRES CCCC BBBB FN/share/linux/ubuntu.iso SI42 SL1 TO123456789 TRIPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII |A RES that is sent from a client (through the hub) indicating a response with the file name "ubuntu.iso" (and its path within the share), where the file size is 42 bytes. The token "123456789" is used. The TR field indicate the hash of the file (see the TIGR extension).
+|URES IPJJWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII TRIPPPWEPPPLCA3PF2ZCRRYO4F2ZX2EV2JMW2KCII FN/share/linux/ubuntu.iso SI42 TO123456789| A RES that is sent from a client (via UDP) indicating a response with the file name "ubuntu.iso" (and its path within the share), where the file size is 42 bytes. The token "123456789" is used. The TR field indicate the hash of the file (see the TIGR extension).
 |CRES FN/share/linux/ubuntu.iso SI42 |A RES that is sent from a client indicating a response with the file name "ubuntu.iso" (and its path within the share), where the file sise is 42 bytes.
 |=====
 
@@ -893,15 +898,15 @@ Note that examples listed here omit the trailing newline character that shall al
 |=====
 |Example |Description
 |DCTM BBBB CCCC ADC/1.0 6666 123456789 |A CTM that is sent from a client to another client indicating that it wants to have a client to client connection. The protocol "ADC/1.0" is used. The port 6666 is used. The token is 123456789. The hub should only send this to the target user (with SID CCCC).
-|ECTM BBBB CCCC ADC/0.5 6666 123456789 |A CTM that is sent from a client to another client indicating that it wants to have a client to client connection. The (fictional) protocol "ADC/1.0" is used. The port 6666 is used. The token is 123456789. The hub should send this to the target user (with SID CCCC) and to the originating party (with SID BBBB).
+|ECTM BBBB CCCC ADC/0.5 6666 123456789 |A CTM that is sent from a client to another client indicating that it wants to have a client to client connection. The (fictional) protocol "ADC/0.5" is used. The port 6666 is used. The token is 123456789. The hub should send this to the target user (with SID CCCC) and to the originating party (with SID BBBB).
 |=====
 
 ==== RCM
 [options="header"]
 |=====
 |Example |Description
-|DRCM BBBB CCCC ADC/1.0 123456789 |A RCM that is sent from a client to another client indicating that it wants to have a client to client connection. The protocol "ADC/1.0" is used. TThe token is 123456789. The hub should only send this to the target user (with SID CCCC).
-|ERCM BBBB CCCC ADC/0.5 123456789 |A RCM that is sent from a client to another client indicating that it wants to have a client to client connection. The (fictional) protocol "ADC/0.5" is used. TThe token is 123456789. The hub should send this to the target user (with SID CCCC) and to the originating party (with SID BBBB).
+|DRCM BBBB CCCC ADC/1.0 123456789 |A RCM that is sent from a client to another client indicating that it wants to have a client to client connection. The protocol "ADC/1.0" is used. The token is 123456789. The hub should only send this to the target user (with SID CCCC).
+|ERCM BBBB CCCC ADC/0.5 123456789 |A RCM that is sent from a client to another client indicating that it wants to have a client to client connection. The (fictional) protocol "ADC/0.5" is used. The token is 123456789. The hub should send this to the target user (with SID CCCC) and to the originating party (with SID BBBB).
 |=====
 
 ==== GPA
